@@ -68,6 +68,9 @@ def main() -> int:
         return 1
 
     DOCS.mkdir(exist_ok=True)
+    # 產出的是純 HTML，讓 GitHub Pages 跳過 Jekyll。這個檔案若不在，
+    # Pages 會用 Jekyll 去處理 docs/，反而可能建置失敗。
+    (DOCS / ".nojekyll").touch()
     index_rows = []
     failed = False
 

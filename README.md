@@ -59,6 +59,11 @@ python scripts/update.py              # 例行
 
 ## 已知限制
 
+- **`docs/.nojekyll` 不要刪。** GitHub Pages 預設會拿 Jekyll 去處理來源目錄，
+  但本專案產出的是純 HTML，交給 Jekyll 只會出錯。這個空檔案就是關掉它的開關，
+  `update.py` 每次執行也會確保它存在。同理，`docs/` 與 `data/` 底下的
+  `index.html`、`.gitkeep` 也請保留 —— Git 不追蹤空資料夾，沒有它們的話
+  這兩個目錄 push 上去會直接消失，Pages 會回報找不到目錄而建置失敗。
 - **下載端點未經實測。** 產出網頁與解析邏輯已用真實資料驗證過，但
   `scripts/moi_fetch.py` 裡的下載網址是依內政部目前的網站行為所寫，
   官方偶爾會調整參數。第一次跑 backfill 時請看 Actions 的日誌，
