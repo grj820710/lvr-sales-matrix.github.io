@@ -33,28 +33,36 @@ def build(project: dict, records: list[dict]) -> str:
     if not records:
         return _empty_page(project)
 
-    by_key = {}
+    # 一格可能有多筆登錄：同一戶解約後重賣就會如此。
+    # 早期版本用「戶別+樓層」當唯一鍵、只留最新一筆，會靜默吃掉紀錄。
+    groups: dict[str, list[dict]] = {}
     for r in records:
-        # 同一戶同一樓層若有多筆（少見，通常是解約後重賣），留最新的一筆
-        k = f"{slug(r['unit'])}_{r['floor']}"
-        prev = by_key.get(k)
-        if prev is None or r["raw_date"] > prev["raw_date"]:
-            by_key[k] = r
+        groups.setdefault(f"{slug(r['unit'])}_{r['floor']}", []).append(r)
+    for rows in groups.values():
+        rows.sort(key=lambda r: r["raw_date"], reverse=True)
 
-    keys = list(by_key.keys())
-    shops = sorted({r["unit"] for r in by_key.values() if r["unit"].startswith("店")})
-    homes = sorted({r["unit"] for r in by_key.values() if not r["unit"].startswith("店")})
+    keys = list(groups)
+    latest = {k: rows[0] for k, rows in groups.items()}
 
-    home_floors = sorted({r["floor"] for r in by_key.values()
+    shops = sorted({r["unit"] for r in latest.values() if r["unit"].startswith("店")})
+    homes = sorted({r["unit"] for r in latest.values() if not r["unit"].startswith("店")})
+
+    home_floors = sorted({r["floor"] for r in latest.values()
                           if not r["unit"].startswith("店")}, reverse=True)
-    if home_floors:
-        floors = list(range(max(home_floors), min(min(home_floors), 2) - 1, -1))
-        floors = [f for f in floors if f >= 2] or home_floors
-    else:
-        floors = []
+    shop_floors = sorted({r["floor"] for r in latest.values()
+                          if r["unit"].startswith("店")}, reverse=True)
+
+    # 樓層清單取實際出現的最高到最低，中間補齊；不再硬性從 2F 起算，
+    # 否則樓層解析失敗（落在 0 或 1）的紀錄會整筆消失。
+    def floor_range(present):
+        if not present:
+            return []
+        return list(range(max(present), min(present) - 1, -1))
+
+    floors = floor_range(home_floors)
 
     def meta(unit):
-        rs = [r for r in by_key.values() if r["unit"] == unit]
+        rs = [r for r in latest.values() if r["unit"] == unit]
         lay = sorted({r["layout"] for r in rs})
         ar = sorted({r["building_area"] for r in rs})
         return (lay[0] if len(lay) == 1 else " / ".join(lay),
@@ -62,15 +70,18 @@ def build(project: dict, records: list[dict]) -> str:
 
     def cell(unit, floor):
         k = f"{slug(unit)}_{floor}"
-        r = by_key.get(k)
-        if not r:
+        rows = groups.get(k)
+        if not rows:
             return '<td class="empty"><span class="empty-label">尚未登錄</span></td>'
+        r = rows[0]
         cls = "sold cancelled" if r["cancelled"] else "sold"
         badge = '<div class="cancel-badge">已解約</div>' if r["cancelled"] else ""
+        multi = (f'<div class="multi">共 {len(rows)} 筆</div>' if len(rows) > 1 else "")
         return (f'<td class="{cls}" id="cell-{k}"><label for="r-{k}">'
                 f'<div class="date">{_esc(r["date"])}</div>'
                 f'<div class="unit-price">{r["unit_price"]:.1f} <span class="unit">萬/坪</span></div>'
-                f'<div class="total-price">{r["total_price"]:,.0f}萬元</div>{badge}</label></td>')
+                f'<div class="total-price">{r["total_price"]:,.0f}萬元</div>'
+                f'{badge}{multi}</label></td>')
 
     def matrix(units, rows, klass, corner, show_layout):
         head = "".join(f'<th id="colhead-{slug(u)}">{_esc(u)}</th>' for u in units)
@@ -94,23 +105,37 @@ def build(project: dict, records: list[dict]) -> str:
 {body}</tbody></table></div>'''
 
     sections = ""
+    rendered = 0
     if homes:
         sections += '<h3 class="section">住宅戶<span class="hint">點格子看明細</span></h3>'
         sections += matrix(homes, floors, "res", "戶別 ／ 樓層", True)
+        rendered += sum(len(groups[f"{slug(u)}_{f}"])
+                        for u in homes for f in floors
+                        if f"{slug(u)}_{f}" in groups)
     if shops:
         sections += '<h3 class="section">店面</h3>'
-        shop_floors = sorted({r["floor"] for r in by_key.values()
-                              if r["unit"].startswith("店")}, reverse=True)
         sections += matrix(shops, shop_floors, "shop", "店別 ／ 樓層", False)
+        rendered += sum(len(groups[f"{slug(u)}_{f}"])
+                        for u in shops for f in shop_floors
+                        if f"{slug(u)}_{f}" in groups)
 
-    panels = "\n".join(_panel(k, by_key[k]) for k in keys)
+    # 對帳：算進表格的筆數必須等於總筆數，不然就把差額講出來，不要靜默吞掉
+    total = len(records)
+    missing = total - rendered
+    mismatch = ""
+    if missing:
+        mismatch = (f'<div class="alert"><strong>有 {missing} 筆登錄未能顯示在上方表格。</strong>'
+                    f'通常是「棟及號」或「移轉層次」的寫法無法對應到樓層。'
+                    f'完整資料仍保存在本專案的 data/ 目錄中。</div>')
+
+    panels = "\n".join(_panel(k, groups[k]) for k in keys)
     radios = ('<input type="radio" name="cellsel" id="r-none" class="cellsel" checked>\n'
               + "\n".join(f'<input type="radio" name="cellsel" id="r-{k}" class="cellsel">'
                           for k in keys))
 
     rules = []
     for k in keys:
-        r = by_key[k]
+        r = latest[k]
         rules.append(f"#r-{k}:checked ~ .layout .panels #p-{k}{{display:block}}")
         rules.append(f"#r-{k}:checked ~ .layout #cell-{k}"
                      "{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}")
@@ -123,21 +148,22 @@ def build(project: dict, records: list[dict]) -> str:
     rules.append(",".join(f"#r-{k}:checked ~ .layout .panels" for k in keys)
                  + "{pointer-events:auto}")
 
-    live = [r for r in by_key.values() if not r["cancelled"]]
-    n_cancel = sum(1 for r in by_key.values() if r["cancelled"])
+    live = [r for r in records if not r["cancelled"]]
+    n_cancel = sum(1 for r in records if r["cancelled"])
     price_note = ""
     if live:
         lo = min(r["unit_price"] for r in live)
         hi = max(r["unit_price"] for r in live)
-        price_note = f'<div class="stat"><div class="k">有效交易單價</div><div class="v">{lo:.1f}~{hi:.1f} <span class="su">萬/坪</span></div></div>'
+        price_note = (f'<div class="stat"><div class="k">有效交易單價</div>'
+                      f'<div class="v">{lo:.1f}~{hi:.1f} <span class="su">萬/坪</span></div></div>')
 
     alert = ""
     if n_cancel:
-        pct = n_cancel / len(by_key) * 100
-        alert = (f'<div class="alert"><strong>{len(by_key)} 筆登錄中有 {n_cancel} 筆事後解約'
+        pct = n_cancel / total * 100
+        alert = (f'<div class="alert"><strong>{total} 筆登錄中有 {n_cancel} 筆事後解約'
                  f'（{pct:.0f}%）。</strong>解約價不代表實際成交行情，看行情時請以未解約的紀錄為準。</div>')
 
-    dates = sorted(r["date"] for r in by_key.values())
+    dates = sorted(r["date"] for r in records)
     span = f"{dates[0]} ～ {dates[-1]}" if dates else ""
     updated = datetime.now(TPE).strftime("%Y-%m-%d %H:%M")
 
@@ -146,10 +172,10 @@ def build(project: dict, records: list[dict]) -> str:
         subtitle=_esc(project.get("subtitle", "")),
         span=_esc(span),
         updated=updated,
-        n_total=len(by_key),
+        n_total=total,
         n_cancel=n_cancel,
         price_note=price_note,
-        alert=alert,
+        alert=mismatch + alert,
         radios=radios,
         sections=sections,
         panels=panels,
@@ -157,7 +183,24 @@ def build(project: dict, records: list[dict]) -> str:
     )
 
 
-def _panel(key: str, r: dict) -> str:
+def _panel(key: str, rows: list[dict]) -> str:
+    """一個格子的詳情面板。rows 由新到舊，可能有多筆（解約後重賣）。"""
+    head = rows[0]
+    name = (f'{_esc(head["unit"])}　1F' if head["unit"].startswith("店")
+            else f'{_esc(head["unit"])}戶　{head["floor"]}F')
+    count_note = (f'<div class="hist-note">這一戶共有 {len(rows)} 筆登錄，由新到舊列出</div>'
+                  if len(rows) > 1 else "")
+    return f'''<div class="detail-panel" id="p-{key}">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">{name}</div>
+<div class="address-box">{_esc(head["address"])}</div>
+{count_note}
+{"".join(_txn(r, i, len(rows)) for i, r in enumerate(rows))}
+</div>'''
+
+
+def _txn(r: dict, idx: int, total: int) -> str:
+    """面板裡的一筆交易。"""
     parking = "".join(
         f'<tr><td>{_esc(p["type"])}</td><td>{p["area"]:.1f}坪</td>'
         f'<td>{(p["price"]/p["area"] if p["area"] else 0):.1f}萬</td>'
@@ -165,12 +208,10 @@ def _panel(key: str, r: dict) -> str:
     tag_cancel = '<span class="tag tag-cancel">已解約</span>' if r["cancelled"] else ""
     note = (f'<div class="cancel-note">本筆交易已於 {_esc(r["cancel_date"])} 解約</div>'
             if r["cancelled"] and r["cancel_date"] else "")
-    name = (f'{_esc(r["unit"])}　1F' if r["unit"].startswith("店")
-            else f'{_esc(r["unit"])}戶　{r["floor"]}F')
-    return f'''<div class="detail-panel" id="p-{key}">
-<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
-<div class="which">{name}</div>
-<div class="address-box">{_esc(r["address"])}</div>
+    divider = '<div class="txn-divider"></div>' if idx else ""
+    seq = f'<div class="txn-seq">第 {total - idx} 筆</div>' if total > 1 else ""
+    return f'''{divider}<div class="txn">
+{seq}
 <div class="tags"><span class="tag">{_esc(r["layout"])}</span><span class="tag">{_esc(r["full_date"])} 成交</span>{tag_cancel}</div>
 {note}
 <div class="price-row">
@@ -275,6 +316,10 @@ table.comp-table td{{border:none;border-bottom:1px solid #f0f1f3;font-size:13px;
 table.comp-table td:first-child{{text-align:left}}
 table.comp-table tr.total-row td{{font-weight:700;color:#d9481f;border-bottom:none;padding-top:9px}}
 .deal-type{{font-size:11.5px;color:#8a8f96;margin:10px 0 0}}
+.multi{{margin-top:3px;font-size:9.5px;color:#3d6fb0;font-weight:700}}
+.hist-note{{font-size:12px;color:#8a8f96;margin-bottom:12px}}
+.txn-divider{{border-top:1px dashed #d8dde3;margin:16px 0}}
+.txn-seq{{font-size:11.5px;color:#8a8f96;font-weight:700;margin-bottom:6px}}
 .footnote{{margin-top:16px;font-size:12px;color:#8a8f96;line-height:1.7}}
 {rules}
 @media (max-width:760px){{
