@@ -2,12 +2,13 @@
 從內政部「不動產成交案件實際資訊資料供應系統」下載開放資料 ZIP。
 
 兩種來源：
-  current  當期資料（每月 1/11/21 發布，只含最近一期）
-  season   分季封存（例：114S3 = 民國114年第3季）
+  current  當期資料（每月 1/11/21 發布，只含最近十天左右的登錄）
+  season   分季封存
 
-當期檔案只有最近十天左右的登錄，要湊出一個建案的完整歷史，必須抓多個季別。
-本專案的做法是：第一次執行時回補數季，之後每週只抓當期 + 最近一季，
-再與 data/ 底下已存的紀錄合併去重。
+重要：分季封存只免費提供最近幾季，較舊的季別官方會關閉免費下載。
+此時網站不會回 404，而是把「系統簡介」那頁 HTML 原封不動吐回來。
+所以下面判斷「開頭不是 PK」就當作該季別不提供，這是正常情況而非錯誤，
+只印一行說明、不重試、也不讓整個流程失敗。
 """
 
 from __future__ import annotations
@@ -20,62 +21,81 @@ from datetime import date
 import requests
 
 BASE = "https://plvr.land.moi.gov.tw"
-CURRENT_URL = f"{BASE}/Download?fileName=lvr_landcsv.zip&type=zip"
-SEASON_URL = f"{BASE}/DownloadSeason?season={{season}}&fileName=lvr_landcsv.zip&type=zip"
+# 參數順序照官方頁面實際送出的樣子（type 在 fileName 之前）
+CURRENT_URL = f"{BASE}/Download?type=zip&fileName=lvr_landcsv.zip"
+SEASON_URL = f"{BASE}/DownloadSeason?season={{season}}&type=zip&fileName=lvr_landcsv.zip"
 
 HEADERS = {
-    # 這個站對沒有 UA 的請求會擋，帶一個一般瀏覽器的 UA
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/125.0 Safari/537.36"
     ),
     "Referer": f"{BASE}/DownloadOpenData",
+    "Accept": "application/zip,application/octet-stream,*/*",
 }
 
-TIMEOUT = 120
+TIMEOUT = 180
 
 
-def _get_zip(url: str, retries: int = 3) -> zipfile.ZipFile | None:
-    """抓一個 ZIP 回來。失敗（含對方回 HTML 錯誤頁）時回 None。"""
+class Result:
+    """zf 有值代表成功；unavailable 代表對方回 HTML（該季別沒開放）。"""
+
+    def __init__(self, zf=None, unavailable=False, error=None):
+        self.zf = zf
+        self.unavailable = unavailable
+        self.error = error
+
+
+def _get(url: str, retries: int = 3) -> Result:
     last_err = None
     for attempt in range(1, retries + 1):
         try:
             resp = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
             resp.raise_for_status()
             data = resp.content
-            if not data[:2] == b"PK":
-                # 對方偶爾會回一頁 HTML（維護中、季別不存在等）
-                last_err = f"回傳的不是 ZIP（前 80 bytes: {data[:80]!r}）"
-            else:
-                return zipfile.ZipFile(io.BytesIO(data))
+            if data[:2] == b"PK":
+                return Result(zf=zipfile.ZipFile(io.BytesIO(data)))
+            # 回了 HTML：該季別未開放免費下載，重試沒有意義
+            return Result(unavailable=True)
         except Exception as exc:  # noqa: BLE001
             last_err = exc
-        if attempt < retries:
-            time.sleep(5 * attempt)
-    print(f"    下載失敗 {url}\n      {last_err}")
-    return None
+            if attempt < retries:
+                time.sleep(5 * attempt)
+    return Result(error=last_err)
 
 
-def fetch_current() -> zipfile.ZipFile | None:
-    print("  下載當期資料 …")
-    return _get_zip(CURRENT_URL)
+def fetch_current() -> Result:
+    r = _get(CURRENT_URL)
+    if r.zf:
+        print("  當期資料：下載成功")
+    elif r.unavailable:
+        print("  當期資料：對方回傳網頁而非檔案，可能正在維護")
+    else:
+        print(f"  當期資料：下載失敗（{r.error}）")
+    return r
 
 
-def fetch_season(season: str) -> zipfile.ZipFile | None:
-    print(f"  下載 {season} …")
-    return _get_zip(SEASON_URL.format(season=season))
+def fetch_season(season: str) -> Result:
+    r = _get(SEASON_URL.format(season=season))
+    if r.zf:
+        print(f"  {season}：下載成功")
+    elif r.unavailable:
+        print(f"  {season}：官方未開放此季別的免費下載，略過")
+    else:
+        print(f"  {season}：下載失敗（{r.error}）")
+    return r
 
 
 def recent_seasons(n: int, today: date | None = None) -> list[str]:
-    """回傳最近 n 個季別代碼，新到舊，例：['115S2', '115S1', '114S4', ...]"""
+    """最近 n 個季別，新到舊。不含當季（當季還在「當期」裡，尚未封存）。"""
     today = today or date.today()
     roc_year = today.year - 1911
     quarter = (today.month - 1) // 3 + 1
     out = []
-    for _ in range(n):
+    for _ in range(n + 1):
         out.append(f"{roc_year}S{quarter}")
         quarter -= 1
         if quarter == 0:
             quarter = 4
             roc_year -= 1
-    return out
+    return out[1:]

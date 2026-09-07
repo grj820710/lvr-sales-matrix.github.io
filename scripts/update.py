@@ -55,17 +55,18 @@ def main() -> int:
 
     # 先把要用的 ZIP 抓下來，多個建案共用，避免重複下載
     zips = []
-    current = moi_fetch.fetch_current()
-    if current:
-        zips.append(("current", current))
-    for s in seasons:
-        z = moi_fetch.fetch_season(s)
-        if z:
-            zips.append((s, z))
+    res = moi_fetch.fetch_current()
+    if res.zf:
+        zips.append(("current", res.zf))
+    for season in seasons:
+        res = moi_fetch.fetch_season(season)
+        if res.zf:
+            zips.append((season, res.zf))
 
     if not zips:
         print("沒有抓到任何資料來源，中止（保留現有頁面不動）。")
         return 1
+    print(f"可用資料來源 {len(zips)} 個：{', '.join(label for label, _ in zips)}")
 
     DOCS.mkdir(exist_ok=True)
     # 產出的是純 HTML，讓 GitHub Pages 跳過 Jekyll。這個檔案若不在，
@@ -93,7 +94,12 @@ def main() -> int:
         print(f"[{slug}] {proj['name']}：共 {len(store)} 筆（本次新增 {added}）")
 
         if not store:
-            print(f"  [{slug}] 查無資料，跳過寫檔以免覆蓋掉先前的頁面")
+            # 查無資料通常代表建案名稱對不上，或這幾個來源剛好沒有這個建案的登錄。
+            # 不寫檔以免把既有頁面洗白，但要讓這次執行顯示為失敗，否則會像成功。
+            print(f"  [{slug}] 查無資料。請確認 projects.json 的 name "
+                  f"與實價登錄上的建案名稱完全相符，且 county 代碼正確。")
+            _hint_names(zips, proj)
+            failed = True
             continue
 
         save_store(slug, store)
@@ -104,7 +110,27 @@ def main() -> int:
     if index_rows:
         (DOCS / "index.html").write_text(_index(index_rows), encoding="utf-8")
 
-    return 1 if failed and not index_rows else 0
+    return 1 if failed else 0
+
+
+def _hint_names(zips, proj) -> None:
+    """查無資料時，把來源裡名字相近的建案列出來，方便對照是不是名稱寫錯。"""
+    import moi_parse as mp
+    seen = set()
+    needle = proj["name"][:2]
+    for _, zf in zips:
+        names = mp.presale_filenames(proj["county"])
+        if names["main"] not in set(zf.namelist()):
+            continue
+        for row in mp._read_csv(zf, names["main"]):
+            nm = mp._pick(row, "建案名稱").strip()
+            if nm and needle in nm:
+                seen.add(nm)
+    if seen:
+        print(f"  [{proj['slug']}] 來源中名稱相近的建案："
+              + "、".join(sorted(seen)[:10]))
+    else:
+        print(f"  [{proj['slug']}] 來源中找不到含「{needle}」的建案名稱。")
 
 
 def _index(rows) -> str:
