@@ -11,6 +11,10 @@ on:
         description: "回補歷史季別（首次建立資料時勾選）"
         type: boolean
         default: false
+      dump:
+        description: "印出來源檔表頭與原始欄位（筆數對不上時勾選）"
+        type: boolean
+        default: false
 
 # 需要寫入權限才能把產出的頁面 commit 回去
 permissions:
@@ -37,11 +41,10 @@ jobs:
 
       - name: 抓取並產出頁面
         run: |
-          if [ "${{ inputs.backfill }}" = "true" ]; then
-            python scripts/update.py --backfill
-          else
-            python scripts/update.py
-          fi
+          ARGS=""
+          [ "${{ inputs.backfill }}" = "true" ] && ARGS="$ARGS --backfill"
+          [ "${{ inputs.dump }}" = "true" ]     && ARGS="$ARGS --dump"
+          python scripts/update.py $ARGS
 
       - name: 提交變更
         run: |

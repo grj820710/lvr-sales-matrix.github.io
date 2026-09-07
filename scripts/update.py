@@ -45,6 +45,8 @@ def save_store(slug: str, store: dict[str, dict]) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backfill", action="store_true", help="回補歷史季別（首次執行用）")
+    ap.add_argument("--dump", action="store_true",
+                    help="印出來源檔的表頭與每一筆原始欄位，用於跟實價登錄網站對帳")
     args = ap.parse_args()
 
     config = json.loads((ROOT / "projects.json").read_text(encoding="utf-8"))
@@ -93,6 +95,19 @@ def main() -> int:
         added = len(store) - before
         print(f"[{slug}] {proj['name']}：共 {len(store)} 筆（本次新增 {added}）")
 
+        # 逐筆列出，方便直接跟實價登錄網站上的筆數與內容對帳。
+        # 筆數對不上時，這份清單是唯一能看出差在哪裡的東西。
+        n_cancel = sum(1 for r in store.values() if r["cancelled"])
+        print(f"  其中標記已解約 {n_cancel} 筆")
+        for r in sorted(store.values(), key=lambda x: (x["unit"], -x["floor"], x["raw_date"])):
+            flag = " [解約]" if r["cancelled"] else ""
+            print(f"    {r['unit']:>6} {r['floor']:>3}F  {r['full_date']}  "
+                  f"{r['total_price']:>8,.0f}萬  {r['unit_price']:>6.2f}萬/坪  "
+                  f"棟及號={r['dong_hao']}{flag}")
+
+        if args.dump:
+            _dump_raw(zips, proj)
+
         if not store:
             # 查無資料通常代表建案名稱對不上，或這幾個來源剛好沒有這個建案的登錄。
             # 不寫檔以免把既有頁面洗白，但要讓這次執行顯示為失敗，否則會像成功。
@@ -111,6 +126,34 @@ def main() -> int:
         (DOCS / "index.html").write_text(_index(index_rows), encoding="utf-8")
 
     return 1 if failed else 0
+
+
+def _dump_raw(zips, proj) -> None:
+    """印出來源主檔的表頭，以及此建案每一列的原始欄位值。
+
+    用途：當產出的筆數與實價登錄網站不符時，先確認
+    (1) 表頭欄名是否與程式模糊比對的關鍵字一致
+    (2) 開放資料裡到底有幾列、解約情形這欄實際存的是什麼
+    """
+    import moi_parse as mp
+    names = mp.presale_filenames(proj["county"])
+    for label, zf in zips:
+        if names["main"] not in set(zf.namelist()):
+            print(f"  [dump] {label}：找不到 {names['main']}，"
+                  f"此來源的檔案有 {len([n for n in zf.namelist() if n.endswith('.csv')])} 個 CSV")
+            continue
+        rows = mp._read_csv(zf, names["main"])
+        mine = [r for r in rows if mp._pick(r, "建案名稱").strip() == proj["name"]]
+        print(f"  [dump] {label}：{names['main']} 共 {len(rows)} 列，"
+              f"其中建案名稱相符 {len(mine)} 列")
+        if rows:
+            print(f"  [dump] 表頭：{' | '.join(rows[0].keys())}")
+        for r in mine:
+            print(f"  [dump] 棟及號={mp._pick(r, '棟及號')!r} "
+                  f"交易年月日={mp._pick(r, '交易年月日')!r} "
+                  f"總價元={mp._pick(r, '總價元', '總價')!r} "
+                  f"移轉層次={mp._pick(r, '移轉層次')!r} "
+                  f"解約情形={mp._pick(r, '解約情形')!r}")
 
 
 def _hint_names(zips, proj) -> None:
