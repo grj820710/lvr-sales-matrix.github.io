@@ -187,7 +187,11 @@ table.comp-table tr.total-row td{font-weight:700;color:#d9481f;border-bottom:non
 #r-C05_5:checked ~ .layout #cell-C05_5{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
 #r-C05_5:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
 #r-C05_5:checked ~ .layout #floorlabel-5{background:#90b6df;color:#0d2c4d}
-#r-B01_6:checked ~ .layout .panels,#r-B01_3:checked ~ .layout .panels,#r-B02_9:checked ~ .layout .panels,#r-B02_8:checked ~ .layout .panels,#r-B02_7:checked ~ .layout .panels,#r-B02_6:checked ~ .layout .panels,#r-B02_5:checked ~ .layout .panels,#r-B02_4:checked ~ .layout .panels,#r-B02_3:checked ~ .layout .panels,#r-B02_2:checked ~ .layout .panels,#r-B05_13:checked ~ .layout .panels,#r-B05_12:checked ~ .layout .panels,#r-B05_11:checked ~ .layout .panels,#r-B05_9:checked ~ .layout .panels,#r-B05_8:checked ~ .layout .panels,#r-B05_7:checked ~ .layout .panels,#r-B05_6:checked ~ .layout .panels,#r-B05_5:checked ~ .layout .panels,#r-C01_2:checked ~ .layout .panels,#r-C03_9:checked ~ .layout .panels,#r-C03_8:checked ~ .layout .panels,#r-C03_7:checked ~ .layout .panels,#r-C03_6:checked ~ .layout .panels,#r-C05_11:checked ~ .layout .panels,#r-C05_10:checked ~ .layout .panels,#r-C05_7:checked ~ .layout .panels,#r-C05_6:checked ~ .layout .panels,#r-C05_5:checked ~ .layout .panels{pointer-events:auto}
+#r-C05_8:checked ~ .layout .panels #p-C05_8{display:block}
+#r-C05_8:checked ~ .layout #cell-C05_8{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_8:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_8:checked ~ .layout #floorlabel-8{background:#90b6df;color:#0d2c4d}
+#r-B01_6:checked ~ .layout .panels,#r-B01_3:checked ~ .layout .panels,#r-B02_9:checked ~ .layout .panels,#r-B02_8:checked ~ .layout .panels,#r-B02_7:checked ~ .layout .panels,#r-B02_6:checked ~ .layout .panels,#r-B02_5:checked ~ .layout .panels,#r-B02_4:checked ~ .layout .panels,#r-B02_3:checked ~ .layout .panels,#r-B02_2:checked ~ .layout .panels,#r-B05_13:checked ~ .layout .panels,#r-B05_12:checked ~ .layout .panels,#r-B05_11:checked ~ .layout .panels,#r-B05_9:checked ~ .layout .panels,#r-B05_8:checked ~ .layout .panels,#r-B05_7:checked ~ .layout .panels,#r-B05_6:checked ~ .layout .panels,#r-B05_5:checked ~ .layout .panels,#r-C01_2:checked ~ .layout .panels,#r-C03_9:checked ~ .layout .panels,#r-C03_8:checked ~ .layout .panels,#r-C03_7:checked ~ .layout .panels,#r-C03_6:checked ~ .layout .panels,#r-C05_11:checked ~ .layout .panels,#r-C05_10:checked ~ .layout .panels,#r-C05_7:checked ~ .layout .panels,#r-C05_6:checked ~ .layout .panels,#r-C05_5:checked ~ .layout .panels,#r-C05_8:checked ~ .layout .panels{pointer-events:auto}
 @media (max-width:760px){
 body{padding:16px 10px 300px}
 h1{font-size:17px}.subtitle{font-size:11.5px}
@@ -217,10 +221,10 @@ border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0
 <h1>勝興豐川　實價登錄銷售矩陣</h1>
 <p class="subtitle">臺中市梧棲區　資料來源：內政部不動產交易實價查詢服務網　登錄區間：114-08 ～ 115-07</p>
 <div class="stats">
-<div class="stat"><div class="k">登錄筆數</div><div class="v">28 筆</div></div>
+<div class="stat"><div class="k">登錄筆數</div><div class="v">29 筆</div></div>
 <div class="stat warn"><div class="k">其中已解約</div><div class="v">0 筆</div></div>
 <div class="stat"><div class="k">有效交易單價</div><div class="v">16.4~22.3 <span class="su">萬/坪</span></div></div>
-<div class="stat"><div class="k">最後更新</div><div class="v" style="font-size:14px">2026-09-07 17:45</div></div>
+<div class="stat"><div class="k">最後更新</div><div class="v" style="font-size:14px">2026-09-07 17:59</div></div>
 </div>
 
 <input type="radio" name="cellsel" id="r-none" class="cellsel" checked>
@@ -252,6 +256,7 @@ border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0
 <input type="radio" name="cellsel" id="r-C05_7" class="cellsel">
 <input type="radio" name="cellsel" id="r-C05_6" class="cellsel">
 <input type="radio" name="cellsel" id="r-C05_5" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_8" class="cellsel">
 <div class="layout">
 <div class="grids">
 <h3 class="section">住宅戶<span class="hint">點格子看明細</span></h3><div class="grid-wrap">
@@ -264,7 +269,7 @@ border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0
 <tr><td class="floor" id="floorlabel-11">11F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B05_11"><label for="r-B05_11"><div class="date">114-10</div><div class="unit-price">19.5 <span class="unit">萬/坪</span></div><div class="total-price">1,455萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_11"><label for="r-C05_11"><div class="date">114-09</div><div class="unit-price">22.3 <span class="unit">萬/坪</span></div><div class="total-price">1,245萬元</div></label></td></tr>
 <tr><td class="floor" id="floorlabel-10">10F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_10"><label for="r-C05_10"><div class="date">114-09</div><div class="unit-price">19.2 <span class="unit">萬/坪</span></div><div class="total-price">1,337萬元</div></label></td></tr>
 <tr><td class="floor" id="floorlabel-9">9F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_9"><label for="r-B02_9"><div class="date">115-07</div><div class="unit-price">20.7 <span class="unit">萬/坪</span></div><div class="total-price">1,095萬元</div></label></td><td class="sold" id="cell-B05_9"><label for="r-B05_9"><div class="date">115-02</div><div class="unit-price">18.9 <span class="unit">萬/坪</span></div><div class="total-price">1,420萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_9"><label for="r-C03_9"><div class="date">114-08</div><div class="unit-price">19.0 <span class="unit">萬/坪</span></div><div class="total-price">1,350萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
-<tr><td class="floor" id="floorlabel-8">8F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_8"><label for="r-B02_8"><div class="date">115-01</div><div class="unit-price">20.9 <span class="unit">萬/坪</span></div><div class="total-price">1,115萬元</div></label></td><td class="sold" id="cell-B05_8"><label for="r-B05_8"><div class="date">115-07</div><div class="unit-price">16.8 <span class="unit">萬/坪</span></div><div class="total-price">1,555萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_8"><label for="r-C03_8"><div class="date">115-07</div><div class="unit-price">19.0 <span class="unit">萬/坪</span></div><div class="total-price">1,326萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-8">8F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_8"><label for="r-B02_8"><div class="date">115-01</div><div class="unit-price">20.9 <span class="unit">萬/坪</span></div><div class="total-price">1,115萬元</div></label></td><td class="sold" id="cell-B05_8"><label for="r-B05_8"><div class="date">115-07</div><div class="unit-price">16.8 <span class="unit">萬/坪</span></div><div class="total-price">1,555萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_8"><label for="r-C03_8"><div class="date">115-07</div><div class="unit-price">19.0 <span class="unit">萬/坪</span></div><div class="total-price">1,326萬元</div></label></td><td class="sold" id="cell-C05_8"><label for="r-C05_8"><div class="date">115-05</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,210萬元</div></label></td></tr>
 <tr><td class="floor" id="floorlabel-7">7F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_7"><label for="r-B02_7"><div class="date">114-12</div><div class="unit-price">20.4 <span class="unit">萬/坪</span></div><div class="total-price">1,095萬元</div></label></td><td class="sold" id="cell-B05_7"><label for="r-B05_7"><div class="date">114-10</div><div class="unit-price">21.6 <span class="unit">萬/坪</span></div><div class="total-price">1,305萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_7"><label for="r-C03_7"><div class="date">114-10</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,208萬元</div></label></td><td class="sold" id="cell-C05_7"><label for="r-C05_7"><div class="date">114-08</div><div class="unit-price">18.8 <span class="unit">萬/坪</span></div><div class="total-price">1,338萬元</div></label></td></tr>
 <tr><td class="floor" id="floorlabel-6">6F</td><td class="sold" id="cell-B01_6"><label for="r-B01_6"><div class="date">115-04</div><div class="unit-price">20.5 <span class="unit">萬/坪</span></div><div class="total-price">1,098萬元</div></label></td><td class="sold" id="cell-B02_6"><label for="r-B02_6"><div class="date">114-11</div><div class="unit-price">20.2 <span class="unit">萬/坪</span></div><div class="total-price">1,075萬元</div></label></td><td class="sold" id="cell-B05_6"><label for="r-B05_6"><div class="date">114-09</div><div class="unit-price">21.5 <span class="unit">萬/坪</span></div><div class="total-price">1,300萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_6"><label for="r-C03_6"><div class="date">115-03</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,208萬元</div></label></td><td class="sold" id="cell-C05_6"><label for="r-C05_6"><div class="date">115-03</div><div class="unit-price">16.4 <span class="unit">萬/坪</span></div><div class="total-price">1,418萬元</div></label></td></tr>
 <tr><td class="floor" id="floorlabel-5">5F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_5"><label for="r-B02_5"><div class="date">115-01</div><div class="unit-price">20.3 <span class="unit">萬/坪</span></div><div class="total-price">1,080萬元</div></label></td><td class="sold" id="cell-B05_5"><label for="r-B05_5"><div class="date">115-03</div><div class="unit-price">18.5 <span class="unit">萬/坪</span></div><div class="total-price">1,395萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_5"><label for="r-C05_5"><div class="date">114-12</div><div class="unit-price">21.2 <span class="unit">萬/坪</span></div><div class="total-price">1,182萬元</div></label></td></tr>
@@ -970,6 +975,31 @@ border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0
 <tr><td>建物面積</td><td>48.8坪</td><td>21.2萬</td><td>1,037萬</td></tr>
 <tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
 <tr class="total-row"><td>合計</td><td></td><td></td><td>1,182萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-C05_8">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　8F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-05-24 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">56.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,210<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>48.8坪</td><td>21.8萬</td><td>1,065萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,210萬</td></tr>
 </tbody></table>
 <p class="deal-type">交易標的：房地(土地+建物)+車位</p>
 </div>

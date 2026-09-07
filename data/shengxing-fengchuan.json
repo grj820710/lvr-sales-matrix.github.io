@@ -736,6 +736,33 @@
  },
  {
   "unit": "C05",
+  "floor": 8,
+  "dong_hao": "C棟08F-05號",
+  "date": "115-05",
+  "full_date": "115-05-24",
+  "raw_date": "1150524",
+  "total_price": 1210.0,
+  "total_area": 56.46,
+  "unit_price": 21.82,
+  "building_area": 48.8,
+  "building_price": 1065.0,
+  "building_unit_price": 21.82,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟08F-05號|1150524|1210"
+ },
+ {
+  "unit": "C05",
   "floor": 7,
   "dong_hao": "C棟07F-05號",
   "date": "114-08",
