@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>勝興豐川　實價登錄銷售矩陣</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+background:#f4f5f7;margin:0;padding:28px 18px;color:#333}
+.wrap{max-width:1200px;margin:0 auto}
+h1{font-size:20px;font-weight:700;color:#1f2d3d;margin:0 0 4px}
+.subtitle{font-size:13px;color:#7a7f87;margin:0 0 16px;line-height:1.6}
+h3.section{font-size:15px;color:#1f2d3d;margin:24px 0 8px;font-weight:700}
+h3.section .hint{font-weight:400;font-size:12px;color:#8a8f96;margin-left:6px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,.07);flex:1;min-width:128px}
+.stat .k{font-size:11px;color:#8a8f96}
+.stat .v{font-size:18px;font-weight:700;color:#29435c;margin-top:2px}
+.stat .su{font-size:11px;font-weight:400}
+.stat.warn .v{color:#b23b3b}
+.alert{background:#fdf0ef;border-left:4px solid #d9584f;border-radius:6px;padding:11px 14px;
+font-size:12.5px;color:#7a3330;line-height:1.65;margin-bottom:18px}
+.cellsel{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.layout{display:flex;align-items:flex-start;gap:20px}
+.grids{flex:1;min-width:0}
+.grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.matrix{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);table-layout:fixed}
+table.res{min-width:460px}table.shop{min-width:620px}
+table.matrix th,table.matrix td{border:1px solid #e3e6ea;text-align:center;padding:6px 4px;vertical-align:middle}
+thead tr.unit-row th{background:#dce6f2;color:#29435c;font-size:14px;font-weight:700;padding:10px 4px;transition:background .15s,color .15s}
+tr.meta-row td{background:#eef3f9;color:#4a5b6e;font-size:11.5px;font-weight:500}
+tr.meta-row td.corner-label{background:#dce6f2;color:#29435c;font-weight:700;font-size:12.5px}
+td.floor{background:#f7f8fa;color:#2c3a4a;font-weight:700;font-size:14px;transition:background .15s,color .15s}
+td.empty{background:#fbfbfb}
+.empty-label{color:#b7bbc2;font-size:12px}
+td.sold{background:#fdf1e4;padding:0;transition:box-shadow .15s}
+td.sold label{display:block;padding:8px 4px;cursor:pointer;-webkit-tap-highlight-color:rgba(61,111,176,.25)}
+td.sold:hover{box-shadow:inset 0 0 0 1px #9db8d6}
+td.sold:active{box-shadow:inset 0 0 0 2px #3d6fb0}
+.date{font-size:11px;color:#8a8f96;margin-bottom:2px}
+.unit-price{font-size:15px;font-weight:700;color:#d9481f;line-height:1.2}
+.unit-price .unit{font-size:10px;font-weight:500}
+.total-price{font-size:11px;color:#8a8f96;margin-top:2px}
+td.cancelled{background:#f1f1f1}
+td.cancelled .unit-price{color:#a3a3a3;text-decoration:line-through}
+td.cancelled .total-price{text-decoration:line-through}
+.cancel-badge{margin-top:2px;font-size:10px;color:#b23b3b;font-weight:700}
+.panels{width:330px;flex-shrink:0;pointer-events:none}
+.detail-panel{display:none;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:16px 18px}
+.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.collapse-btn{color:#3d6fb0;font-size:13px;cursor:pointer;padding:6px 10px;margin:-6px -4px;border-radius:5px;background:#eef3f9;user-select:none}
+.detail-header h2{font-size:16px;font-weight:700;margin:0;color:#1f2d3d}
+.which{font-size:14px;font-weight:700;color:#29435c;margin-bottom:8px}
+.address-box{background:#f7f8fa;border-radius:8px;padding:11px 13px;font-size:13.5px;color:#29435c;line-height:1.5;margin-bottom:10px}
+.tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tag{background:#e6eef8;color:#29435c;font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px}
+.tag.tag-cancel{background:#fbe6e6;color:#a3312f}
+.cancel-note{background:#fdf0ef;border-radius:6px;padding:8px 11px;font-size:12px;color:#a3312f;margin-bottom:12px}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.price-item{text-align:center;flex:1}
+.price-item .big{font-size:19px;font-weight:700;color:#d9481f}
+.price-item .big .u{font-size:11px}
+.price-item.mid .big{color:#29435c}
+.comp-title{font-size:13px;font-weight:700;color:#1f2d3d;margin:0 0 6px}
+table.comp-table{width:100%;border-collapse:collapse}
+table.comp-table th{color:#8a8f96;font-size:12px;font-weight:500;border:none;border-bottom:1px solid #e3e6ea;padding:6px 2px;text-align:right}
+table.comp-table th:first-child{text-align:left}
+table.comp-table td{border:none;border-bottom:1px solid #f0f1f3;font-size:13px;padding:7px 2px;text-align:right;color:#2c3a4a}
+table.comp-table td:first-child{text-align:left}
+table.comp-table tr.total-row td{font-weight:700;color:#d9481f;border-bottom:none;padding-top:9px}
+.deal-type{font-size:11.5px;color:#8a8f96;margin:10px 0 0}
+.footnote{margin-top:16px;font-size:12px;color:#8a8f96;line-height:1.7}
+#r-C03_8:checked ~ .layout .panels #p-C03_8{display:block}
+#r-C03_8:checked ~ .layout #cell-C03_8{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C03_8:checked ~ .layout #colhead-C03{background:#90b6df;color:#0d2c4d}
+#r-C03_8:checked ~ .layout #floorlabel-8{background:#90b6df;color:#0d2c4d}
+#r-B05_8:checked ~ .layout .panels #p-B05_8{display:block}
+#r-B05_8:checked ~ .layout #cell-B05_8{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_8:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_8:checked ~ .layout #floorlabel-8{background:#90b6df;color:#0d2c4d}
+#r-B02_9:checked ~ .layout .panels #p-B02_9{display:block}
+#r-B02_9:checked ~ .layout #cell-B02_9{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_9:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_9:checked ~ .layout #floorlabel-9{background:#90b6df;color:#0d2c4d}
+#r-C01_2:checked ~ .layout .panels #p-C01_2{display:block}
+#r-C01_2:checked ~ .layout #cell-C01_2{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C01_2:checked ~ .layout #colhead-C01{background:#90b6df;color:#0d2c4d}
+#r-C01_2:checked ~ .layout #floorlabel-2{background:#90b6df;color:#0d2c4d}
+#r-B05_5:checked ~ .layout .panels #p-B05_5{display:block}
+#r-B05_5:checked ~ .layout #cell-B05_5{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_5:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_5:checked ~ .layout #floorlabel-5{background:#90b6df;color:#0d2c4d}
+#r-C05_6:checked ~ .layout .panels #p-C05_6{display:block}
+#r-C05_6:checked ~ .layout #cell-C05_6{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_6:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_6:checked ~ .layout #floorlabel-6{background:#90b6df;color:#0d2c4d}
+#r-C03_6:checked ~ .layout .panels #p-C03_6{display:block}
+#r-C03_6:checked ~ .layout #cell-C03_6{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C03_6:checked ~ .layout #colhead-C03{background:#90b6df;color:#0d2c4d}
+#r-C03_6:checked ~ .layout #floorlabel-6{background:#90b6df;color:#0d2c4d}
+#r-B02_3:checked ~ .layout .panels #p-B02_3{display:block}
+#r-B02_3:checked ~ .layout #cell-B02_3{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_3:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_3:checked ~ .layout #floorlabel-3{background:#90b6df;color:#0d2c4d}
+#r-B01_6:checked ~ .layout .panels #p-B01_6{display:block}
+#r-B01_6:checked ~ .layout #cell-B01_6{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B01_6:checked ~ .layout #colhead-B01{background:#90b6df;color:#0d2c4d}
+#r-B01_6:checked ~ .layout #floorlabel-6{background:#90b6df;color:#0d2c4d}
+#r-B02_4:checked ~ .layout .panels #p-B02_4{display:block}
+#r-B02_4:checked ~ .layout #cell-B02_4{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_4:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_4:checked ~ .layout #floorlabel-4{background:#90b6df;color:#0d2c4d}
+#r-B01_3:checked ~ .layout .panels #p-B01_3{display:block}
+#r-B01_3:checked ~ .layout #cell-B01_3{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B01_3:checked ~ .layout #colhead-B01{background:#90b6df;color:#0d2c4d}
+#r-B01_3:checked ~ .layout #floorlabel-3{background:#90b6df;color:#0d2c4d}
+#r-B02_6:checked ~ .layout .panels #p-B02_6{display:block}
+#r-B02_6:checked ~ .layout #cell-B02_6{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_6:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_6:checked ~ .layout #floorlabel-6{background:#90b6df;color:#0d2c4d}
+#r-C05_5:checked ~ .layout .panels #p-C05_5{display:block}
+#r-C05_5:checked ~ .layout #cell-C05_5{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_5:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_5:checked ~ .layout #floorlabel-5{background:#90b6df;color:#0d2c4d}
+#r-B02_7:checked ~ .layout .panels #p-B02_7{display:block}
+#r-B02_7:checked ~ .layout #cell-B02_7{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_7:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_7:checked ~ .layout #floorlabel-7{background:#90b6df;color:#0d2c4d}
+#r-B02_8:checked ~ .layout .panels #p-B02_8{display:block}
+#r-B02_8:checked ~ .layout #cell-B02_8{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_8:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_8:checked ~ .layout #floorlabel-8{background:#90b6df;color:#0d2c4d}
+#r-B02_5:checked ~ .layout .panels #p-B02_5{display:block}
+#r-B02_5:checked ~ .layout #cell-B02_5{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_5:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_5:checked ~ .layout #floorlabel-5{background:#90b6df;color:#0d2c4d}
+#r-B05_9:checked ~ .layout .panels #p-B05_9{display:block}
+#r-B05_9:checked ~ .layout #cell-B05_9{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_9:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_9:checked ~ .layout #floorlabel-9{background:#90b6df;color:#0d2c4d}
+#r-C03_9:checked ~ .layout .panels #p-C03_9{display:block}
+#r-C03_9:checked ~ .layout #cell-C03_9{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C03_9:checked ~ .layout #colhead-C03{background:#90b6df;color:#0d2c4d}
+#r-C03_9:checked ~ .layout #floorlabel-9{background:#90b6df;color:#0d2c4d}
+#r-B05_6:checked ~ .layout .panels #p-B05_6{display:block}
+#r-B05_6:checked ~ .layout #cell-B05_6{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_6:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_6:checked ~ .layout #floorlabel-6{background:#90b6df;color:#0d2c4d}
+#r-C05_11:checked ~ .layout .panels #p-C05_11{display:block}
+#r-C05_11:checked ~ .layout #cell-C05_11{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_11:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_11:checked ~ .layout #floorlabel-11{background:#90b6df;color:#0d2c4d}
+#r-C05_10:checked ~ .layout .panels #p-C05_10{display:block}
+#r-C05_10:checked ~ .layout #cell-C05_10{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_10:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_10:checked ~ .layout #floorlabel-10{background:#90b6df;color:#0d2c4d}
+#r-C03_7:checked ~ .layout .panels #p-C03_7{display:block}
+#r-C03_7:checked ~ .layout #cell-C03_7{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C03_7:checked ~ .layout #colhead-C03{background:#90b6df;color:#0d2c4d}
+#r-C03_7:checked ~ .layout #floorlabel-7{background:#90b6df;color:#0d2c4d}
+#r-B02_2:checked ~ .layout .panels #p-B02_2{display:block}
+#r-B02_2:checked ~ .layout #cell-B02_2{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B02_2:checked ~ .layout #colhead-B02{background:#90b6df;color:#0d2c4d}
+#r-B02_2:checked ~ .layout #floorlabel-2{background:#90b6df;color:#0d2c4d}
+#r-B05_11:checked ~ .layout .panels #p-B05_11{display:block}
+#r-B05_11:checked ~ .layout #cell-B05_11{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_11:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_11:checked ~ .layout #floorlabel-11{background:#90b6df;color:#0d2c4d}
+#r-B05_7:checked ~ .layout .panels #p-B05_7{display:block}
+#r-B05_7:checked ~ .layout #cell-B05_7{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_7:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_7:checked ~ .layout #floorlabel-7{background:#90b6df;color:#0d2c4d}
+#r-B05_13:checked ~ .layout .panels #p-B05_13{display:block}
+#r-B05_13:checked ~ .layout #cell-B05_13{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_13:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_13:checked ~ .layout #floorlabel-13{background:#90b6df;color:#0d2c4d}
+#r-B05_12:checked ~ .layout .panels #p-B05_12{display:block}
+#r-B05_12:checked ~ .layout #cell-B05_12{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B05_12:checked ~ .layout #colhead-B05{background:#90b6df;color:#0d2c4d}
+#r-B05_12:checked ~ .layout #floorlabel-12{background:#90b6df;color:#0d2c4d}
+#r-C05_7:checked ~ .layout .panels #p-C05_7{display:block}
+#r-C05_7:checked ~ .layout #cell-C05_7{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-C05_7:checked ~ .layout #colhead-C05{background:#90b6df;color:#0d2c4d}
+#r-C05_7:checked ~ .layout #floorlabel-7{background:#90b6df;color:#0d2c4d}
+#r-C03_8:checked ~ .layout .panels,#r-B05_8:checked ~ .layout .panels,#r-B02_9:checked ~ .layout .panels,#r-C01_2:checked ~ .layout .panels,#r-B05_5:checked ~ .layout .panels,#r-C05_6:checked ~ .layout .panels,#r-C03_6:checked ~ .layout .panels,#r-B02_3:checked ~ .layout .panels,#r-B01_6:checked ~ .layout .panels,#r-B02_4:checked ~ .layout .panels,#r-B01_3:checked ~ .layout .panels,#r-B02_6:checked ~ .layout .panels,#r-C05_5:checked ~ .layout .panels,#r-B02_7:checked ~ .layout .panels,#r-B02_8:checked ~ .layout .panels,#r-B02_5:checked ~ .layout .panels,#r-B05_9:checked ~ .layout .panels,#r-C03_9:checked ~ .layout .panels,#r-B05_6:checked ~ .layout .panels,#r-C05_11:checked ~ .layout .panels,#r-C05_10:checked ~ .layout .panels,#r-C03_7:checked ~ .layout .panels,#r-B02_2:checked ~ .layout .panels,#r-B05_11:checked ~ .layout .panels,#r-B05_7:checked ~ .layout .panels,#r-B05_13:checked ~ .layout .panels,#r-B05_12:checked ~ .layout .panels,#r-C05_7:checked ~ .layout .panels{pointer-events:auto}
+@media (max-width:760px){
+body{padding:16px 10px 300px}
+h1{font-size:17px}.subtitle{font-size:11.5px}
+h3.section{font-size:13.5px;margin:20px 0 7px}
+.stat{padding:8px 11px;min-width:46%}.stat .v{font-size:16px}
+.alert{font-size:11.5px;padding:10px 12px}
+.layout{flex-direction:column;gap:16px}
+table.res{min-width:380px}table.shop{min-width:560px}
+table.matrix th,table.matrix td{padding:4px 2px}
+thead tr.unit-row th{font-size:11.5px;padding:7px 2px}
+tr.meta-row td{font-size:9.5px;padding:5px 2px}
+tr.meta-row td.corner-label{font-size:10px}
+td.floor{font-size:12px}
+td.sold label{padding:6px 2px}
+.date{font-size:9px}.unit-price{font-size:12px}.unit-price .unit{font-size:8px}
+.total-price{font-size:9px}.cancel-badge{font-size:8px}
+.panels{position:fixed;left:0;right:0;bottom:0;width:100%;z-index:50;padding:0 8px 8px}
+.detail-panel{max-height:74vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0,0,0,.18)}
+.price-item .big{font-size:17px}
+.collapse-btn{padding:8px 12px;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>勝興豐川　實價登錄銷售矩陣</h1>
+<p class="subtitle">臺中市梧棲區　資料來源：內政部不動產交易實價查詢服務網　登錄區間：114-08 ～ 115-07</p>
+<div class="stats">
+<div class="stat"><div class="k">登錄筆數</div><div class="v">28 筆</div></div>
+<div class="stat warn"><div class="k">其中已解約</div><div class="v">0 筆</div></div>
+<div class="stat"><div class="k">有效交易單價</div><div class="v">16.4~22.3 <span class="su">萬/坪</span></div></div>
+<div class="stat"><div class="k">最後更新</div><div class="v" style="font-size:14px">2026-09-07 15:51</div></div>
+</div>
+
+<input type="radio" name="cellsel" id="r-none" class="cellsel" checked>
+<input type="radio" name="cellsel" id="r-C03_8" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_8" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_9" class="cellsel">
+<input type="radio" name="cellsel" id="r-C01_2" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_5" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_6" class="cellsel">
+<input type="radio" name="cellsel" id="r-C03_6" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_3" class="cellsel">
+<input type="radio" name="cellsel" id="r-B01_6" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_4" class="cellsel">
+<input type="radio" name="cellsel" id="r-B01_3" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_6" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_5" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_7" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_8" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_5" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_9" class="cellsel">
+<input type="radio" name="cellsel" id="r-C03_9" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_6" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_11" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_10" class="cellsel">
+<input type="radio" name="cellsel" id="r-C03_7" class="cellsel">
+<input type="radio" name="cellsel" id="r-B02_2" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_11" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_7" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_13" class="cellsel">
+<input type="radio" name="cellsel" id="r-B05_12" class="cellsel">
+<input type="radio" name="cellsel" id="r-C05_7" class="cellsel">
+<div class="layout">
+<div class="grids">
+<h3 class="section">住宅戶<span class="hint">點格子看明細</span></h3><div class="grid-wrap">
+<table class="matrix res">
+<colgroup><col style="width:58px"><col><col><col><col><col><col></colgroup>
+<thead><tr class="unit-row"><th>戶別 ／ 樓層</th><th id="colhead-B01">B01</th><th id="colhead-B02">B02</th><th id="colhead-B05">B05</th><th id="colhead-C01">C01</th><th id="colhead-C03">C03</th><th id="colhead-C05">C05</th></tr><tr class="meta-row"><td class="corner-label">格局</td><td class="meta">3房2廳2衛</td><td class="meta">3房2廳2衛</td><td class="meta">4房2廳2衛</td><td class="meta">3房2廳2衛</td><td class="meta">3房2廳2衛</td><td class="meta">3房2廳2衛</td></tr><tr class="meta-row"><td class="corner-label">建物面積</td><td class="meta">46.0~53.6 坪</td><td class="meta">46.0 坪</td><td class="meta">53.8~69.2 坪</td><td class="meta">46.5 坪</td><td class="meta">48.8~56.5 坪</td><td class="meta">48.8~64.1 坪</td></tr></thead>
+<tbody>
+<tr><td class="floor" id="floorlabel-13">13F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B05_13"><label for="r-B05_13"><div class="date">114-08</div><div class="unit-price">17.3 <span class="unit">萬/坪</span></div><div class="total-price">1,590萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-12">12F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B05_12"><label for="r-B05_12"><div class="date">114-08</div><div class="unit-price">19.4 <span class="unit">萬/坪</span></div><div class="total-price">1,465萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-11">11F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B05_11"><label for="r-B05_11"><div class="date">114-10</div><div class="unit-price">19.5 <span class="unit">萬/坪</span></div><div class="total-price">1,455萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_11"><label for="r-C05_11"><div class="date">114-09</div><div class="unit-price">22.3 <span class="unit">萬/坪</span></div><div class="total-price">1,245萬元</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-10">10F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_10"><label for="r-C05_10"><div class="date">114-09</div><div class="unit-price">19.2 <span class="unit">萬/坪</span></div><div class="total-price">1,337萬元</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-9">9F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_9"><label for="r-B02_9"><div class="date">115-07</div><div class="unit-price">20.7 <span class="unit">萬/坪</span></div><div class="total-price">1,095萬元</div></label></td><td class="sold" id="cell-B05_9"><label for="r-B05_9"><div class="date">115-02</div><div class="unit-price">18.9 <span class="unit">萬/坪</span></div><div class="total-price">1,420萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_9"><label for="r-C03_9"><div class="date">114-08</div><div class="unit-price">19.0 <span class="unit">萬/坪</span></div><div class="total-price">1,350萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-8">8F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_8"><label for="r-B02_8"><div class="date">115-01</div><div class="unit-price">20.9 <span class="unit">萬/坪</span></div><div class="total-price">1,115萬元</div></label></td><td class="sold" id="cell-B05_8"><label for="r-B05_8"><div class="date">115-07</div><div class="unit-price">16.8 <span class="unit">萬/坪</span></div><div class="total-price">1,555萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_8"><label for="r-C03_8"><div class="date">115-07</div><div class="unit-price">19.0 <span class="unit">萬/坪</span></div><div class="total-price">1,326萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-7">7F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_7"><label for="r-B02_7"><div class="date">114-12</div><div class="unit-price">20.4 <span class="unit">萬/坪</span></div><div class="total-price">1,095萬元</div></label></td><td class="sold" id="cell-B05_7"><label for="r-B05_7"><div class="date">114-10</div><div class="unit-price">21.6 <span class="unit">萬/坪</span></div><div class="total-price">1,305萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_7"><label for="r-C03_7"><div class="date">114-10</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,208萬元</div></label></td><td class="sold" id="cell-C05_7"><label for="r-C05_7"><div class="date">114-08</div><div class="unit-price">18.8 <span class="unit">萬/坪</span></div><div class="total-price">1,338萬元</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-6">6F</td><td class="sold" id="cell-B01_6"><label for="r-B01_6"><div class="date">115-04</div><div class="unit-price">20.5 <span class="unit">萬/坪</span></div><div class="total-price">1,098萬元</div></label></td><td class="sold" id="cell-B02_6"><label for="r-B02_6"><div class="date">114-11</div><div class="unit-price">20.2 <span class="unit">萬/坪</span></div><div class="total-price">1,075萬元</div></label></td><td class="sold" id="cell-B05_6"><label for="r-B05_6"><div class="date">114-09</div><div class="unit-price">21.5 <span class="unit">萬/坪</span></div><div class="total-price">1,300萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C03_6"><label for="r-C03_6"><div class="date">115-03</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,208萬元</div></label></td><td class="sold" id="cell-C05_6"><label for="r-C05_6"><div class="date">115-03</div><div class="unit-price">16.4 <span class="unit">萬/坪</span></div><div class="total-price">1,418萬元</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-5">5F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_5"><label for="r-B02_5"><div class="date">115-01</div><div class="unit-price">20.3 <span class="unit">萬/坪</span></div><div class="total-price">1,080萬元</div></label></td><td class="sold" id="cell-B05_5"><label for="r-B05_5"><div class="date">115-03</div><div class="unit-price">18.5 <span class="unit">萬/坪</span></div><div class="total-price">1,395萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C05_5"><label for="r-C05_5"><div class="date">114-12</div><div class="unit-price">21.2 <span class="unit">萬/坪</span></div><div class="total-price">1,182萬元</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-4">4F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_4"><label for="r-B02_4"><div class="date">115-04</div><div class="unit-price">20.0 <span class="unit">萬/坪</span></div><div class="total-price">1,065萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-3">3F</td><td class="sold" id="cell-B01_3"><label for="r-B01_3"><div class="date">115-04</div><div class="unit-price">17.1 <span class="unit">萬/坪</span></div><div class="total-price">1,173萬元</div></label></td><td class="sold" id="cell-B02_3"><label for="r-B02_3"><div class="date">115-04</div><div class="unit-price">19.8 <span class="unit">萬/坪</span></div><div class="total-price">1,055萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-2">2F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-B02_2"><label for="r-B02_2"><div class="date">114-10</div><div class="unit-price">20.1 <span class="unit">萬/坪</span></div><div class="total-price">1,068萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-C01_2"><label for="r-C01_2"><div class="date">115-07</div><div class="unit-price">21.8 <span class="unit">萬/坪</span></div><div class="total-price">1,170萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+</tbody></table></div>
+</div>
+<div class="panels">
+<div class="detail-panel" id="p-C03_8">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C03戶　8F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-07-12 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.0<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">71.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,326<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>56.5坪</td><td>19.0萬</td><td>1,071萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,326萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_8">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　8F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">115-07-12 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">16.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">92.1<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,555<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>69.2坪</td><td>16.8萬</td><td>1,160萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,555萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_9">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　9F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-07-17 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.7<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,095<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.7萬</td><td>950萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,095萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C01_2">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C01戶　2F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-07-15 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">54.2<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,170<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.5坪</td><td>21.8萬</td><td>1,015萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,170萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_5">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　5F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">115-03-01 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">18.5<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">76.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,395<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>61.5坪</td><td>18.5萬</td><td>1,140萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,395萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C05_6">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　6F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-03-07 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">16.4<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">87.1<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,418<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>64.1坪</td><td>16.4萬</td><td>1,053萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,418萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C03_6">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C03戶　6F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-03-22 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">56.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,208<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>48.8坪</td><td>21.8萬</td><td>1,063萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,208萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_3">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　3F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-04-09 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,055<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>19.8萬</td><td>910萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,055萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B01_6">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B01戶　6F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-04-26 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.5<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,098<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.5萬</td><td>943萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,098萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_4">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　4F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-04-20 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.0<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,065<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.0萬</td><td>920萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,065萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B01_3">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B01戶　3F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-04-28 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">17.1<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">69.0<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,173<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>53.6坪</td><td>17.1萬</td><td>918萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,173萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_6">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　6F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-11-28 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.2<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,075<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.2萬</td><td>930萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,075萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C05_5">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　5F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-12-30 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.2<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">56.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,182<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>48.8坪</td><td>21.2萬</td><td>1,037萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,182萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_7">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　7F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-12-28 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.4<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,095<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.4萬</td><td>940萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,095萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_8">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　8F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-01-19 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.9<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,115<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.9萬</td><td>960萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,115萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_5">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　5F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">115-01-28 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.3<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,080<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.3萬</td><td>935萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,080萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_9">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　9F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">115-02-07 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">18.9<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">76.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,420<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>61.5坪</td><td>18.9萬</td><td>1,165萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,420萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C03_9">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C03戶　9F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-08-24 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.0<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">71.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,350<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>56.5坪</td><td>19.0萬</td><td>1,075萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,350萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_6">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　6F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">114-09-06 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.5<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">61.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,300<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>53.8坪</td><td>21.5萬</td><td>1,155萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,300萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C05_11">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　11F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-09-10 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">22.3<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">56.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,245<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>48.8坪</td><td>22.3萬</td><td>1,090萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,245萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C05_10">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　10F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-09-21 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.2<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">71.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,337<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>56.5坪</td><td>19.2萬</td><td>1,082萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,337萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C03_7">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C03戶　7F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-10-04 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">56.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,208<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>48.8坪</td><td>21.8萬</td><td>1,063萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,208萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B02_2">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B02戶　2F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-10-04 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">20.1<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">53.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,068<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>46.0坪</td><td>20.1萬</td><td>923萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,068萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_11">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　11F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">114-10-14 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.5<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">76.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,455<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>61.5坪</td><td>19.5萬</td><td>1,200萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>14.4萬</td><td>110萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,455萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_7">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　7F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">114-10-25 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">21.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">61.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,305<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>53.8坪</td><td>21.6萬</td><td>1,160萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>18.9萬</td><td>145萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,305萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_13">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　13F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">114-08-09 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">17.3<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">92.1<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,590<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>69.2坪</td><td>17.3萬</td><td>1,195萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,590萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-B05_12">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B05戶　12F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">4房2廳2衛</span><span class="tag">114-08-09 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">19.4<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">76.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,465<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>61.5坪</td><td>19.4萬</td><td>1,190萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,465萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+<div class="detail-panel" id="p-C05_7">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">C05戶　7F</div>
+<div class="address-box">臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口</div>
+<div class="tags"><span class="tag">3房2廳2衛</span><span class="tag">114-08-10 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">18.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">71.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,338<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>56.5坪</td><td>18.8萬</td><td>1,063萬</td></tr>
+<tr><td>坡道平面</td><td>7.7坪</td><td>20.2萬</td><td>155萬</td></tr><tr><td>坡道平面</td><td>7.7坪</td><td>15.7萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,338萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+</div>
+<p class="footnote">
+每格由上至下：交易月份（民國年-月）／單價（萬元・坪）／總價（萬元）。「尚未登錄」表示該樓層戶別尚無實價登錄紀錄，不等於未銷售。<br>
+單價與「建物面積」皆已扣除車位；詳情面板中的「總面積」則含車位坪數，兩者不同屬正常。<br>
+本頁由排程自動更新，資料以內政部實價查詢服務網為準。
+</p>
+</div>
+</body>
+</html>

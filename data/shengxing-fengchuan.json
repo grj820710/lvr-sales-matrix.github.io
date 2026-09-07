@@ -1,0 +1,833 @@
+[
+ {
+  "unit": "B01",
+  "floor": 6,
+  "dong_hao": "B棟06F-01號",
+  "date": "115-04",
+  "full_date": "115-04-26",
+  "raw_date": "1150426",
+  "total_price": 1098.0,
+  "total_area": 53.65,
+  "unit_price": 20.5,
+  "building_area": 45.99,
+  "building_price": 943.0,
+  "building_unit_price": 20.5,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟06F-01號|1150426|1098"
+ },
+ {
+  "unit": "B01",
+  "floor": 3,
+  "dong_hao": "B棟03F-01號",
+  "date": "115-04",
+  "full_date": "115-04-28",
+  "raw_date": "1150428",
+  "total_price": 1173.0,
+  "total_area": 68.98,
+  "unit_price": 17.11,
+  "building_area": 53.65,
+  "building_price": 918.0,
+  "building_unit_price": 17.11,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟03F-01號|1150428|1173"
+ },
+ {
+  "unit": "B02",
+  "floor": 9,
+  "dong_hao": "B棟09F-02號",
+  "date": "115-07",
+  "full_date": "115-07-17",
+  "raw_date": "1150717",
+  "total_price": 1095.0,
+  "total_area": 53.65,
+  "unit_price": 20.66,
+  "building_area": 45.99,
+  "building_price": 950.0,
+  "building_unit_price": 20.66,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟09F-02號|1150717|1095"
+ },
+ {
+  "unit": "B02",
+  "floor": 8,
+  "dong_hao": "B棟08F-02號",
+  "date": "115-01",
+  "full_date": "115-01-19",
+  "raw_date": "1150119",
+  "total_price": 1115.0,
+  "total_area": 53.65,
+  "unit_price": 20.87,
+  "building_area": 45.99,
+  "building_price": 960.0,
+  "building_unit_price": 20.87,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟08F-02號|1150119|1115"
+ },
+ {
+  "unit": "B02",
+  "floor": 7,
+  "dong_hao": "B棟07F-02號",
+  "date": "114-12",
+  "full_date": "114-12-28",
+  "raw_date": "1141228",
+  "total_price": 1095.0,
+  "total_area": 53.65,
+  "unit_price": 20.44,
+  "building_area": 45.99,
+  "building_price": 940.0,
+  "building_unit_price": 20.44,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟07F-02號|1141228|1095"
+ },
+ {
+  "unit": "B02",
+  "floor": 6,
+  "dong_hao": "B棟06F-02號",
+  "date": "114-11",
+  "full_date": "114-11-28",
+  "raw_date": "1141128",
+  "total_price": 1075.0,
+  "total_area": 53.65,
+  "unit_price": 20.22,
+  "building_area": 45.99,
+  "building_price": 930.0,
+  "building_unit_price": 20.22,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟06F-02號|1141128|1075"
+ },
+ {
+  "unit": "B02",
+  "floor": 5,
+  "dong_hao": "B棟05F-02號",
+  "date": "115-01",
+  "full_date": "115-01-28",
+  "raw_date": "1150128",
+  "total_price": 1080.0,
+  "total_area": 53.65,
+  "unit_price": 20.33,
+  "building_area": 45.99,
+  "building_price": 935.0,
+  "building_unit_price": 20.33,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟05F-02號|1150128|1080"
+ },
+ {
+  "unit": "B02",
+  "floor": 4,
+  "dong_hao": "B棟04F-02號",
+  "date": "115-04",
+  "full_date": "115-04-20",
+  "raw_date": "1150420",
+  "total_price": 1065.0,
+  "total_area": 53.65,
+  "unit_price": 20.0,
+  "building_area": 45.99,
+  "building_price": 920.0,
+  "building_unit_price": 20.0,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟04F-02號|1150420|1065"
+ },
+ {
+  "unit": "B02",
+  "floor": 3,
+  "dong_hao": "B棟03F-02號",
+  "date": "115-04",
+  "full_date": "115-04-09",
+  "raw_date": "1150409",
+  "total_price": 1055.0,
+  "total_area": 53.65,
+  "unit_price": 19.79,
+  "building_area": 45.99,
+  "building_price": 910.0,
+  "building_unit_price": 19.79,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟03F-02號|1150409|1055"
+ },
+ {
+  "unit": "B02",
+  "floor": 2,
+  "dong_hao": "B棟02F-02號",
+  "date": "114-10",
+  "full_date": "114-10-04",
+  "raw_date": "1141004",
+  "total_price": 1068.0,
+  "total_area": 53.65,
+  "unit_price": 20.07,
+  "building_area": 45.99,
+  "building_price": 923.0,
+  "building_unit_price": 20.07,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟02F-02號|1141004|1068"
+ },
+ {
+  "unit": "B05",
+  "floor": 13,
+  "dong_hao": "B棟13F-05號",
+  "date": "114-08",
+  "full_date": "114-08-09",
+  "raw_date": "1140809",
+  "total_price": 1590.0,
+  "total_area": 92.14,
+  "unit_price": 17.28,
+  "building_area": 69.15,
+  "building_price": 1195.0,
+  "building_unit_price": 17.28,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟13F-05號|1140809|1590"
+ },
+ {
+  "unit": "B05",
+  "floor": 12,
+  "dong_hao": "B棟12F-05號",
+  "date": "114-08",
+  "full_date": "114-08-09",
+  "raw_date": "1140809",
+  "total_price": 1465.0,
+  "total_area": 76.81,
+  "unit_price": 19.35,
+  "building_area": 61.49,
+  "building_price": 1190.0,
+  "building_unit_price": 19.35,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟12F-05號|1140809|1465"
+ },
+ {
+  "unit": "B05",
+  "floor": 11,
+  "dong_hao": "B棟11F-05號",
+  "date": "114-10",
+  "full_date": "114-10-14",
+  "raw_date": "1141014",
+  "total_price": 1455.0,
+  "total_area": 76.81,
+  "unit_price": 19.52,
+  "building_area": 61.49,
+  "building_price": 1200.0,
+  "building_unit_price": 19.52,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟11F-05號|1141014|1455"
+ },
+ {
+  "unit": "B05",
+  "floor": 9,
+  "dong_hao": "B棟09F-05號",
+  "date": "115-02",
+  "full_date": "115-02-07",
+  "raw_date": "1150207",
+  "total_price": 1420.0,
+  "total_area": 76.81,
+  "unit_price": 18.95,
+  "building_area": 61.49,
+  "building_price": 1165.0,
+  "building_unit_price": 18.95,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟09F-05號|1150207|1420"
+ },
+ {
+  "unit": "B05",
+  "floor": 8,
+  "dong_hao": "B棟8F-05號",
+  "date": "115-07",
+  "full_date": "115-07-12",
+  "raw_date": "1150712",
+  "total_price": 1555.0,
+  "total_area": 92.14,
+  "unit_price": 16.78,
+  "building_area": 69.15,
+  "building_price": 1160.0,
+  "building_unit_price": 16.78,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟8F-05號|1150712|1555"
+ },
+ {
+  "unit": "B05",
+  "floor": 7,
+  "dong_hao": "B棟07F-05號",
+  "date": "114-10",
+  "full_date": "114-10-25",
+  "raw_date": "1141025",
+  "total_price": 1305.0,
+  "total_area": 61.49,
+  "unit_price": 21.55,
+  "building_area": 53.82,
+  "building_price": 1160.0,
+  "building_unit_price": 21.55,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟07F-05號|1141025|1305"
+ },
+ {
+  "unit": "B05",
+  "floor": 6,
+  "dong_hao": "B棟06F-05號",
+  "date": "114-09",
+  "full_date": "114-09-06",
+  "raw_date": "1140906",
+  "total_price": 1300.0,
+  "total_area": 61.49,
+  "unit_price": 21.46,
+  "building_area": 53.82,
+  "building_price": 1155.0,
+  "building_unit_price": 21.46,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟06F-05號|1140906|1300"
+ },
+ {
+  "unit": "B05",
+  "floor": 5,
+  "dong_hao": "B棟05F-05號",
+  "date": "115-03",
+  "full_date": "115-03-01",
+  "raw_date": "1150301",
+  "total_price": 1395.0,
+  "total_area": 76.81,
+  "unit_price": 18.54,
+  "building_area": 61.49,
+  "building_price": 1140.0,
+  "building_unit_price": 18.54,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "4房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|B棟05F-05號|1150301|1395"
+ },
+ {
+  "unit": "C01",
+  "floor": 2,
+  "dong_hao": "C棟02F-01號",
+  "date": "115-07",
+  "full_date": "115-07-15",
+  "raw_date": "1150715",
+  "total_price": 1170.0,
+  "total_area": 54.18,
+  "unit_price": 21.82,
+  "building_area": 46.52,
+  "building_price": 1015.0,
+  "building_unit_price": 21.82,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟02F-01號|1150715|1170"
+ },
+ {
+  "unit": "C03",
+  "floor": 9,
+  "dong_hao": "C棟09F-03號",
+  "date": "114-08",
+  "full_date": "114-08-24",
+  "raw_date": "1140824",
+  "total_price": 1350.0,
+  "total_area": 71.8,
+  "unit_price": 19.03,
+  "building_area": 56.48,
+  "building_price": 1075.0,
+  "building_unit_price": 19.03,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟09F-03號|1140824|1350"
+ },
+ {
+  "unit": "C03",
+  "floor": 8,
+  "dong_hao": "C棟08F-03號",
+  "date": "115-07",
+  "full_date": "115-07-12",
+  "raw_date": "1150712",
+  "total_price": 1326.0,
+  "total_area": 71.8,
+  "unit_price": 18.96,
+  "building_area": 56.48,
+  "building_price": 1071.0,
+  "building_unit_price": 18.96,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟08F-03號|1150712|1326"
+ },
+ {
+  "unit": "C03",
+  "floor": 7,
+  "dong_hao": "C棟07F-03號",
+  "date": "114-10",
+  "full_date": "114-10-04",
+  "raw_date": "1141004",
+  "total_price": 1208.0,
+  "total_area": 56.48,
+  "unit_price": 21.77,
+  "building_area": 48.82,
+  "building_price": 1063.0,
+  "building_unit_price": 21.77,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟07F-03號|1141004|1208"
+ },
+ {
+  "unit": "C03",
+  "floor": 6,
+  "dong_hao": "C棟06F-03號",
+  "date": "115-03",
+  "full_date": "115-03-22",
+  "raw_date": "1150322",
+  "total_price": 1208.0,
+  "total_area": 56.48,
+  "unit_price": 21.77,
+  "building_area": 48.82,
+  "building_price": 1063.0,
+  "building_unit_price": 21.77,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟06F-03號|1150322|1208"
+ },
+ {
+  "unit": "C05",
+  "floor": 11,
+  "dong_hao": "C棟11F-05號",
+  "date": "114-09",
+  "full_date": "114-09-10",
+  "raw_date": "1140910",
+  "total_price": 1245.0,
+  "total_area": 56.46,
+  "unit_price": 22.34,
+  "building_area": 48.8,
+  "building_price": 1090.0,
+  "building_unit_price": 22.34,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟11F-05號|1140910|1245"
+ },
+ {
+  "unit": "C05",
+  "floor": 10,
+  "dong_hao": "C棟10F-05號",
+  "date": "114-09",
+  "full_date": "114-09-21",
+  "raw_date": "1140921",
+  "total_price": 1337.0,
+  "total_area": 71.79,
+  "unit_price": 19.16,
+  "building_area": 56.46,
+  "building_price": 1082.0,
+  "building_unit_price": 19.16,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟10F-05號|1140921|1337"
+ },
+ {
+  "unit": "C05",
+  "floor": 7,
+  "dong_hao": "C棟07F-05號",
+  "date": "114-08",
+  "full_date": "114-08-10",
+  "raw_date": "1140810",
+  "total_price": 1338.0,
+  "total_area": 71.79,
+  "unit_price": 18.83,
+  "building_area": 56.46,
+  "building_price": 1063.0,
+  "building_unit_price": 18.83,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟07F-05號|1140810|1338"
+ },
+ {
+  "unit": "C05",
+  "floor": 6,
+  "dong_hao": "C棟06F-05號",
+  "date": "115-03",
+  "full_date": "115-03-07",
+  "raw_date": "1150307",
+  "total_price": 1418.0,
+  "total_area": 87.11,
+  "unit_price": 16.42,
+  "building_area": 64.13,
+  "building_price": 1053.0,
+  "building_unit_price": 16.42,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 110.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟06F-05號|1150307|1418"
+ },
+ {
+  "unit": "C05",
+  "floor": 5,
+  "dong_hao": "C棟05F-05號",
+  "date": "114-12",
+  "full_date": "114-12-30",
+  "raw_date": "1141230",
+  "total_price": 1182.0,
+  "total_area": 56.46,
+  "unit_price": 21.25,
+  "building_area": 48.8,
+  "building_price": 1037.0,
+  "building_unit_price": 21.25,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "臺中市梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "勝興豐川|C棟05F-05號|1141230|1182"
+ }
+]
