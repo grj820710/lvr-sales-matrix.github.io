@@ -24,6 +24,10 @@ BASE = "https://plvr.land.moi.gov.tw"
 # 參數順序照官方頁面實際送出的樣子（type 在 fileName 之前）
 CURRENT_URL = f"{BASE}/Download?type=zip&fileName=lvr_landcsv.zip"
 SEASON_URL = f"{BASE}/DownloadSeason?season={{season}}&type=zip&fileName=lvr_landcsv.zip"
+# 按發布日期下載。用來補「當季尚未封存」的空窗：分季檔只到上一季，
+# 而 CURRENT_URL 只有最近一批（約十天），中間發布的資料兩邊都拿不到。
+# 注意這裡的日期是西元 YYYYMMDD，不是民國年。
+HISTORY_URL = f"{BASE}/DownloadHistory?type=history&fileName={{ymd}}"
 
 HEADERS = {
     "User-Agent": (
@@ -84,6 +88,40 @@ def fetch_season(season: str) -> Result:
     else:
         print(f"  {season}：下載失敗（{r.error}）")
     return r
+
+
+def fetch_history(ymd: str) -> Result:
+    r = _get(HISTORY_URL.format(ymd=ymd))
+    if r.zf:
+        print(f"  發布日 {ymd}：下載成功")
+    elif r.unavailable:
+        print(f"  發布日 {ymd}：官方未提供此發布日的下載，略過")
+    else:
+        print(f"  發布日 {ymd}：下載失敗（{r.error}）")
+    return r
+
+
+def publish_dates(months_back: int = 6, today: date | None = None) -> list[str]:
+    """實價登錄每月 1、11、21 日發布。回傳最近幾個月的發布日，舊到新（西元）。
+
+    這些日期用來填補當季尚未封存的空窗，同時也是取得「解約情形」更新的唯一途徑：
+    解約是在原交易發布後才申報的，只會出現在申報日之後發布的批次裡。
+    """
+    today = today or date.today()
+    out = []
+    year, month = today.year, today.month
+    months = []
+    for _ in range(months_back):
+        months.append((year, month))
+        month -= 1
+        if month == 0:
+            month = 12
+            year -= 1
+    for y, m in reversed(months):
+        for d in (1, 11, 21):
+            if date(y, m, d) <= today:
+                out.append(f"{y}{m:02d}{d:02d}")
+    return out
 
 
 def recent_seasons(n: int, today: date | None = None) -> list[str]:

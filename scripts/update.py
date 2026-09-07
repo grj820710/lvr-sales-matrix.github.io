@@ -52,23 +52,32 @@ def main() -> int:
     config = json.loads((ROOT / "projects.json").read_text(encoding="utf-8"))
     projects = config["projects"]
 
-    n_seasons = config.get("backfill_seasons", 8) if args.backfill else 1
-    seasons = moi_fetch.recent_seasons(n_seasons)
+    n_seasons = config.get("backfill_seasons", 8) if args.backfill else 2
+    n_months = config.get("publish_months", 6) if not args.backfill else 12
 
-    # 先把要用的 ZIP 抓下來，多個建案共用，避免重複下載
+    # 來源必須「舊到新」排列。同一筆交易若在後續批次被更新（最常見的是補上
+    # 解約情形），合併時要讓較新的快照覆蓋較舊的；順序顛倒會反過來把解約洗掉。
     zips = []
-    res = moi_fetch.fetch_current()
-    if res.zf:
-        zips.append(("current", res.zf))
-    for season in seasons:
+    for season in reversed(moi_fetch.recent_seasons(n_seasons)):
         res = moi_fetch.fetch_season(season)
         if res.zf:
             zips.append((season, res.zf))
 
+    # 分季檔只到上一季，當季要靠發布日檔案補。這也是取得解約更新的唯一途徑。
+    for ymd in moi_fetch.publish_dates(n_months):
+        res = moi_fetch.fetch_history(ymd)
+        if res.zf:
+            zips.append((f"發布日{ymd}", res.zf))
+
+    res = moi_fetch.fetch_current()
+    if res.zf:
+        zips.append(("current", res.zf))
+
     if not zips:
         print("沒有抓到任何資料來源，中止（保留現有頁面不動）。")
         return 1
-    print(f"可用資料來源 {len(zips)} 個：{', '.join(label for label, _ in zips)}")
+    print(f"可用資料來源 {len(zips)} 個（舊到新）："
+          f"{', '.join(label for label, _ in zips)}")
 
     DOCS.mkdir(exist_ok=True)
     # 產出的是純 HTML，讓 GitHub Pages 跳過 Jekyll。這個檔案若不在，
