@@ -255,6 +255,11 @@ _PAGE = """<!DOCTYPE html>
 body{{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
 background:#f4f5f7;margin:0;padding:28px 18px;color:#333}}
 .wrap{{max-width:1200px;margin:0 auto}}
+.back-home{{display:inline-block;margin:0 0 10px;padding:6px 12px 6px 10px;
+background:#fff;border-radius:6px;color:#3d6fb0;font-size:13px;font-weight:600;
+text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,.07);
+-webkit-tap-highlight-color:rgba(61,111,176,.25)}}
+.back-home:hover{{background:#eef3f9}}
 h1{{font-size:20px;font-weight:700;color:#1f2d3d;margin:0 0 4px}}
 .subtitle{{font-size:13px;color:#7a7f87;margin:0 0 16px;line-height:1.6}}
 h3.section{{font-size:15px;color:#1f2d3d;margin:24px 0 8px;font-weight:700}}
@@ -325,6 +330,7 @@ table.comp-table tr.total-row td{{font-weight:700;color:#d9481f;border-bottom:no
 @media (max-width:760px){{
 body{{padding:16px 10px 300px}}
 h1{{font-size:17px}}.subtitle{{font-size:11.5px}}
+.back-home{{padding:8px 14px 8px 12px;font-size:14px;margin-bottom:12px}}
 h3.section{{font-size:13.5px;margin:20px 0 7px}}
 .stat{{padding:8px 11px;min-width:46%}}.stat .v{{font-size:16px}}
 .alert{{font-size:11.5px;padding:10px 12px}}
@@ -348,6 +354,7 @@ border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0
 </head>
 <body>
 <div class="wrap">
+<a class="back-home" href="index.html">‹ 返回建案列表</a>
 <h1>{title}　實價登錄銷售矩陣</h1>
 <p class="subtitle">{subtitle}　資料來源：內政部不動產交易實價查詢服務網　登錄區間：{span}</p>
 <div class="stats">
