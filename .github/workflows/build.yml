@@ -1,0 +1,47 @@
+name: 產出銷售矩陣網頁
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sources/**"
+      - "scripts/**"
+      - "projects.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-lvr
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安裝相依套件
+        run: pip install -r requirements.txt
+
+      - name: 產出頁面
+        run: python scripts/build.py
+
+      - name: 提交變更
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs data
+          if git diff --staged --quiet; then
+            echo "產出內容無變化，不建立 commit"
+          else
+            git commit -m "更新銷售矩陣 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+            git push
+          fi

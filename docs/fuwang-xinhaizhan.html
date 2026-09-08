@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>富旺心海綻　實價登錄銷售矩陣</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+background:#f4f5f7;margin:0;padding:28px 18px;color:#333}
+.wrap{max-width:1200px;margin:0 auto}
+h1{font-size:20px;font-weight:700;color:#1f2d3d;margin:0 0 4px}
+.subtitle{font-size:13px;color:#7a7f87;margin:0 0 16px;line-height:1.6}
+h3.section{font-size:15px;color:#1f2d3d;margin:24px 0 8px;font-weight:700}
+h3.section .hint{font-weight:400;font-size:12px;color:#8a8f96;margin-left:6px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,.07);flex:1;min-width:128px}
+.stat .k{font-size:11px;color:#8a8f96}
+.stat .v{font-size:18px;font-weight:700;color:#29435c;margin-top:2px}
+.stat .su{font-size:11px;font-weight:400}
+.stat.warn .v{color:#b23b3b}
+.alert{background:#fdf0ef;border-left:4px solid #d9584f;border-radius:6px;padding:11px 14px;
+font-size:12.5px;color:#7a3330;line-height:1.65;margin-bottom:18px}
+.cellsel{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.layout{display:flex;align-items:flex-start;gap:20px}
+.grids{flex:1;min-width:0}
+.grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.matrix{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);table-layout:fixed}
+table.res{min-width:460px}table.shop{min-width:620px}
+table.matrix th,table.matrix td{border:1px solid #e3e6ea;text-align:center;padding:6px 4px;vertical-align:middle}
+thead tr.unit-row th{background:#dce6f2;color:#29435c;font-size:14px;font-weight:700;padding:10px 4px;transition:background .15s,color .15s}
+tr.meta-row td{background:#eef3f9;color:#4a5b6e;font-size:11.5px;font-weight:500}
+tr.meta-row td.corner-label{background:#dce6f2;color:#29435c;font-weight:700;font-size:12.5px}
+td.floor{background:#f7f8fa;color:#2c3a4a;font-weight:700;font-size:14px;transition:background .15s,color .15s}
+td.empty{background:#fbfbfb}
+.empty-label{color:#b7bbc2;font-size:12px}
+td.sold{background:#fdf1e4;padding:0;transition:box-shadow .15s}
+td.sold label{display:block;padding:8px 4px;cursor:pointer;-webkit-tap-highlight-color:rgba(61,111,176,.25)}
+td.sold:hover{box-shadow:inset 0 0 0 1px #9db8d6}
+td.sold:active{box-shadow:inset 0 0 0 2px #3d6fb0}
+.date{font-size:11px;color:#8a8f96;margin-bottom:2px}
+.unit-price{font-size:15px;font-weight:700;color:#d9481f;line-height:1.2}
+.unit-price .unit{font-size:10px;font-weight:500}
+.total-price{font-size:11px;color:#8a8f96;margin-top:2px}
+td.cancelled{background:#f1f1f1}
+td.cancelled .unit-price{color:#a3a3a3;text-decoration:line-through}
+td.cancelled .total-price{text-decoration:line-through}
+.cancel-badge{margin-top:2px;font-size:10px;color:#b23b3b;font-weight:700}
+.panels{width:330px;flex-shrink:0;pointer-events:none}
+.detail-panel{display:none;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:16px 18px}
+.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.collapse-btn{color:#3d6fb0;font-size:13px;cursor:pointer;padding:6px 10px;margin:-6px -4px;border-radius:5px;background:#eef3f9;user-select:none}
+.detail-header h2{font-size:16px;font-weight:700;margin:0;color:#1f2d3d}
+.which{font-size:14px;font-weight:700;color:#29435c;margin-bottom:8px}
+.address-box{background:#f7f8fa;border-radius:8px;padding:11px 13px;font-size:13.5px;color:#29435c;line-height:1.5;margin-bottom:10px}
+.tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tag{background:#e6eef8;color:#29435c;font-size:12px;font-weight:600;padding:4px 10px;border-radius:5px}
+.tag.tag-cancel{background:#fbe6e6;color:#a3312f}
+.cancel-note{background:#fdf0ef;border-radius:6px;padding:8px 11px;font-size:12px;color:#a3312f;margin-bottom:12px}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.price-item{text-align:center;flex:1}
+.price-item .big{font-size:19px;font-weight:700;color:#d9481f}
+.price-item .big .u{font-size:11px}
+.price-item.mid .big{color:#29435c}
+.comp-title{font-size:13px;font-weight:700;color:#1f2d3d;margin:0 0 6px}
+table.comp-table{width:100%;border-collapse:collapse}
+table.comp-table th{color:#8a8f96;font-size:12px;font-weight:500;border:none;border-bottom:1px solid #e3e6ea;padding:6px 2px;text-align:right}
+table.comp-table th:first-child{text-align:left}
+table.comp-table td{border:none;border-bottom:1px solid #f0f1f3;font-size:13px;padding:7px 2px;text-align:right;color:#2c3a4a}
+table.comp-table td:first-child{text-align:left}
+table.comp-table tr.total-row td{font-weight:700;color:#d9481f;border-bottom:none;padding-top:9px}
+.deal-type{font-size:11.5px;color:#8a8f96;margin:10px 0 0}
+.multi{margin-top:3px;font-size:9.5px;color:#3d6fb0;font-weight:700}
+.hist-note{font-size:12px;color:#8a8f96;margin-bottom:12px}
+.txn-divider{border-top:1px dashed #d8dde3;margin:16px 0}
+.txn-seq{font-size:11.5px;color:#8a8f96;font-weight:700;margin-bottom:6px}
+.footnote{margin-top:16px;font-size:12px;color:#8a8f96;line-height:1.7}
+#r-B7_4:checked ~ .layout .panels #p-B7_4{display:block}
+#r-B7_4:checked ~ .layout #cell-B7_4{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B7_4:checked ~ .layout #cell-B7_4{background:#e6e6e6}
+#r-B7_4:checked ~ .layout #colhead-B7{background:#90b6df;color:#0d2c4d}
+#r-B7_4:checked ~ .layout #floorlabel-4{background:#90b6df;color:#0d2c4d}
+#r-A5_3:checked ~ .layout .panels #p-A5_3{display:block}
+#r-A5_3:checked ~ .layout #cell-A5_3{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-A5_3:checked ~ .layout #cell-A5_3{background:#e6e6e6}
+#r-A5_3:checked ~ .layout #colhead-A5{background:#90b6df;color:#0d2c4d}
+#r-A5_3:checked ~ .layout #floorlabel-3{background:#90b6df;color:#0d2c4d}
+#r-B7_5:checked ~ .layout .panels #p-B7_5{display:block}
+#r-B7_5:checked ~ .layout #cell-B7_5{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-B7_5:checked ~ .layout #cell-B7_5{background:#e6e6e6}
+#r-B7_5:checked ~ .layout #colhead-B7{background:#90b6df;color:#0d2c4d}
+#r-B7_5:checked ~ .layout #floorlabel-5{background:#90b6df;color:#0d2c4d}
+#r-A8_10:checked ~ .layout .panels #p-A8_10{display:block}
+#r-A8_10:checked ~ .layout #cell-A8_10{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-A8_10:checked ~ .layout #colhead-A8{background:#90b6df;color:#0d2c4d}
+#r-A8_10:checked ~ .layout #floorlabel-10{background:#90b6df;color:#0d2c4d}
+#r-S9_1:checked ~ .layout .panels #p-S9_1{display:block}
+#r-S9_1:checked ~ .layout #cell-S9_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S9_1:checked ~ .layout #cell-S9_1{background:#e6e6e6}
+#r-S9_1:checked ~ .layout #colhead-S9{background:#90b6df;color:#0d2c4d}
+#r-S9_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-A8_3:checked ~ .layout .panels #p-A8_3{display:block}
+#r-A8_3:checked ~ .layout #cell-A8_3{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-A8_3:checked ~ .layout #cell-A8_3{background:#e6e6e6}
+#r-A8_3:checked ~ .layout #colhead-A8{background:#90b6df;color:#0d2c4d}
+#r-A8_3:checked ~ .layout #floorlabel-3{background:#90b6df;color:#0d2c4d}
+#r-S3_1:checked ~ .layout .panels #p-S3_1{display:block}
+#r-S3_1:checked ~ .layout #cell-S3_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S3_1:checked ~ .layout #colhead-S3{background:#90b6df;color:#0d2c4d}
+#r-S3_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-S7_1:checked ~ .layout .panels #p-S7_1{display:block}
+#r-S7_1:checked ~ .layout #cell-S7_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S7_1:checked ~ .layout #colhead-S7{background:#90b6df;color:#0d2c4d}
+#r-S7_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-A9_4:checked ~ .layout .panels #p-A9_4{display:block}
+#r-A9_4:checked ~ .layout #cell-A9_4{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-A9_4:checked ~ .layout #cell-A9_4{background:#e6e6e6}
+#r-A9_4:checked ~ .layout #colhead-A9{background:#90b6df;color:#0d2c4d}
+#r-A9_4:checked ~ .layout #floorlabel-4{background:#90b6df;color:#0d2c4d}
+#r-S2_1:checked ~ .layout .panels #p-S2_1{display:block}
+#r-S2_1:checked ~ .layout #cell-S2_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S2_1:checked ~ .layout #colhead-S2{background:#90b6df;color:#0d2c4d}
+#r-S2_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-S8_1:checked ~ .layout .panels #p-S8_1{display:block}
+#r-S8_1:checked ~ .layout #cell-S8_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S8_1:checked ~ .layout #cell-S8_1{background:#e6e6e6}
+#r-S8_1:checked ~ .layout #colhead-S8{background:#90b6df;color:#0d2c4d}
+#r-S8_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-S5_1:checked ~ .layout .panels #p-S5_1{display:block}
+#r-S5_1:checked ~ .layout #cell-S5_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S5_1:checked ~ .layout #colhead-S5{background:#90b6df;color:#0d2c4d}
+#r-S5_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-S6_1:checked ~ .layout .panels #p-S6_1{display:block}
+#r-S6_1:checked ~ .layout #cell-S6_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S6_1:checked ~ .layout #colhead-S6{background:#90b6df;color:#0d2c4d}
+#r-S6_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-S1_1:checked ~ .layout .panels #p-S1_1{display:block}
+#r-S1_1:checked ~ .layout #cell-S1_1{box-shadow:inset 0 0 0 2px #3d6fb0;background:#fbe6c8}
+#r-S1_1:checked ~ .layout #cell-S1_1{background:#e6e6e6}
+#r-S1_1:checked ~ .layout #colhead-S1{background:#90b6df;color:#0d2c4d}
+#r-S1_1:checked ~ .layout #floorlabel-1{background:#90b6df;color:#0d2c4d}
+#r-B7_4:checked ~ .layout .panels,#r-A5_3:checked ~ .layout .panels,#r-B7_5:checked ~ .layout .panels,#r-A8_10:checked ~ .layout .panels,#r-S9_1:checked ~ .layout .panels,#r-A8_3:checked ~ .layout .panels,#r-S3_1:checked ~ .layout .panels,#r-S7_1:checked ~ .layout .panels,#r-A9_4:checked ~ .layout .panels,#r-S2_1:checked ~ .layout .panels,#r-S8_1:checked ~ .layout .panels,#r-S5_1:checked ~ .layout .panels,#r-S6_1:checked ~ .layout .panels,#r-S1_1:checked ~ .layout .panels{pointer-events:auto}
+@media (max-width:760px){
+body{padding:16px 10px 300px}
+h1{font-size:17px}.subtitle{font-size:11.5px}
+h3.section{font-size:13.5px;margin:20px 0 7px}
+.stat{padding:8px 11px;min-width:46%}.stat .v{font-size:16px}
+.alert{font-size:11.5px;padding:10px 12px}
+.layout{flex-direction:column;gap:16px}
+table.res{min-width:380px}table.shop{min-width:560px}
+table.matrix th,table.matrix td{padding:4px 2px}
+thead tr.unit-row th{font-size:11.5px;padding:7px 2px}
+tr.meta-row td{font-size:9.5px;padding:5px 2px}
+tr.meta-row td.corner-label{font-size:10px}
+td.floor{font-size:12px}
+td.sold label{padding:6px 2px}
+.date{font-size:9px}.unit-price{font-size:12px}.unit-price .unit{font-size:8px}
+.total-price{font-size:9px}.cancel-badge{font-size:8px}
+.panels{position:fixed;left:0;right:0;bottom:0;width:100%;z-index:50;padding:0 8px 8px}
+.detail-panel{max-height:74vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+border-radius:12px 12px 0 0;padding:14px 14px 18px;box-shadow:0 -3px 16px rgba(0,0,0,.18)}
+.price-item .big{font-size:17px}
+.collapse-btn{padding:8px 12px;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>富旺心海綻　實價登錄銷售矩陣</h1>
+<p class="subtitle">臺中市沙鹿區　資料來源：內政部不動產交易實價查詢服務網　登錄區間：114-09 ～ 115-05</p>
+<div class="stats">
+<div class="stat"><div class="k">登錄筆數</div><div class="v">14 筆</div></div>
+<div class="stat warn"><div class="k">其中已解約</div><div class="v">8 筆</div></div>
+<div class="stat"><div class="k">有效交易單價</div><div class="v">39.0~50.7 <span class="su">萬/坪</span></div></div>
+<div class="stat"><div class="k">最後更新</div><div class="v" style="font-size:14px">2026-09-08 10:10</div></div>
+</div>
+<div class="alert"><strong>14 筆登錄中有 8 筆事後解約（57%）。</strong>解約價不代表實際成交行情，看行情時請以未解約的紀錄為準。</div>
+<input type="radio" name="cellsel" id="r-none" class="cellsel" checked>
+<input type="radio" name="cellsel" id="r-B7_4" class="cellsel">
+<input type="radio" name="cellsel" id="r-A5_3" class="cellsel">
+<input type="radio" name="cellsel" id="r-B7_5" class="cellsel">
+<input type="radio" name="cellsel" id="r-A8_10" class="cellsel">
+<input type="radio" name="cellsel" id="r-S9_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-A8_3" class="cellsel">
+<input type="radio" name="cellsel" id="r-S3_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-S7_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-A9_4" class="cellsel">
+<input type="radio" name="cellsel" id="r-S2_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-S8_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-S5_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-S6_1" class="cellsel">
+<input type="radio" name="cellsel" id="r-S1_1" class="cellsel">
+<div class="layout">
+<div class="grids">
+<h3 class="section">住宅戶<span class="hint">點格子看明細</span></h3><div class="grid-wrap">
+<table class="matrix res">
+<colgroup><col style="width:58px"><col><col><col><col></colgroup>
+<thead><tr class="unit-row"><th>戶別 ／ 樓層</th><th id="colhead-A5">A5</th><th id="colhead-A8">A8</th><th id="colhead-A9">A9</th><th id="colhead-B7">B7</th></tr><tr class="meta-row"><td class="corner-label">格局</td><td class="meta">2房1廳1衛</td><td class="meta">2房1廳1衛</td><td class="meta">2房1廳1衛</td><td class="meta">2房1廳2衛 / 2房2廳2衛</td></tr><tr class="meta-row"><td class="corner-label">建物面積</td><td class="meta">21.9 坪</td><td class="meta">18.9 坪</td><td class="meta">18.9 坪</td><td class="meta">25.8 坪</td></tr></thead>
+<tbody>
+<tr><td class="floor" id="floorlabel-10">10F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold" id="cell-A8_10"><label for="r-A8_10"><div class="date">114-11</div><div class="unit-price">39.0 <span class="unit">萬/坪</span></div><div class="total-price">735萬元</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-9">9F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-8">8F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-7">7F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-6">6F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+<tr><td class="floor" id="floorlabel-5">5F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold cancelled" id="cell-B7_5"><label for="r-B7_5"><div class="date">114-12</div><div class="unit-price">37.8 <span class="unit">萬/坪</span></div><div class="total-price">1,140萬元</div><div class="cancel-badge">已解約</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-4">4F</td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="sold cancelled" id="cell-A9_4"><label for="r-A9_4"><div class="date">114-10</div><div class="unit-price">36.6 <span class="unit">萬/坪</span></div><div class="total-price">855萬元</div><div class="cancel-badge">已解約</div></label></td><td class="sold cancelled" id="cell-B7_4"><label for="r-B7_4"><div class="date">115-05</div><div class="unit-price">36.4 <span class="unit">萬/坪</span></div><div class="total-price">1,060萬元</div><div class="cancel-badge">已解約</div></label></td></tr>
+<tr><td class="floor" id="floorlabel-3">3F</td><td class="sold cancelled" id="cell-A5_3"><label for="r-A5_3"><div class="date">114-12</div><div class="unit-price">38.6 <span class="unit">萬/坪</span></div><div class="total-price">965萬元</div><div class="cancel-badge">已解約</div></label></td><td class="sold cancelled" id="cell-A8_3"><label for="r-A8_3"><div class="date">114-10</div><div class="unit-price">37.6 <span class="unit">萬/坪</span></div><div class="total-price">710萬元</div><div class="cancel-badge">已解約</div></label></td><td class="empty"><span class="empty-label">尚未登錄</span></td><td class="empty"><span class="empty-label">尚未登錄</span></td></tr>
+</tbody></table></div><h3 class="section">店面</h3><div class="grid-wrap">
+<table class="matrix shop">
+<colgroup><col style="width:58px"><col><col><col><col><col><col><col><col></colgroup>
+<thead><tr class="unit-row"><th>店別 ／ 樓層</th><th id="colhead-S1">店1</th><th id="colhead-S2">店2</th><th id="colhead-S3">店3</th><th id="colhead-S5">店5</th><th id="colhead-S6">店6</th><th id="colhead-S7">店7</th><th id="colhead-S8">店8</th><th id="colhead-S9">店9</th></tr><tr class="meta-row"><td class="corner-label">建物面積</td><td class="meta">24.1 坪</td><td class="meta">20.9 坪</td><td class="meta">20.8 坪</td><td class="meta">23.1 坪</td><td class="meta">22.3 坪</td><td class="meta">20.7 坪</td><td class="meta">21.7 坪</td><td class="meta">22.2 坪</td></tr></thead>
+<tbody>
+<tr><td class="floor" id="floorlabel-1">1F</td><td class="sold cancelled" id="cell-S1_1"><label for="r-S1_1"><div class="date">114-09</div><div class="unit-price">48.1 <span class="unit">萬/坪</span></div><div class="total-price">1,325萬元</div><div class="cancel-badge">已解約</div></label></td><td class="sold" id="cell-S2_1"><label for="r-S2_1"><div class="date">114-10</div><div class="unit-price">48.6 <span class="unit">萬/坪</span></div><div class="total-price">1,182萬元</div></label></td><td class="sold" id="cell-S3_1"><label for="r-S3_1"><div class="date">114-10</div><div class="unit-price">50.7 <span class="unit">萬/坪</span></div><div class="total-price">1,055萬元</div></label></td><td class="sold" id="cell-S5_1"><label for="r-S5_1"><div class="date">114-09</div><div class="unit-price">48.4 <span class="unit">萬/坪</span></div><div class="total-price">1,120萬元</div></label></td><td class="sold" id="cell-S6_1"><label for="r-S6_1"><div class="date">114-09</div><div class="unit-price">50.6 <span class="unit">萬/坪</span></div><div class="total-price">1,130萬元</div></label></td><td class="sold" id="cell-S7_1"><label for="r-S7_1"><div class="date">114-10</div><div class="unit-price">50.5 <span class="unit">萬/坪</span></div><div class="total-price">1,045萬元</div></label></td><td class="sold cancelled" id="cell-S8_1"><label for="r-S8_1"><div class="date">114-10</div><div class="unit-price">50.6 <span class="unit">萬/坪</span></div><div class="total-price">1,450萬元</div><div class="cancel-badge">已解約</div></label></td><td class="sold cancelled" id="cell-S9_1"><label for="r-S9_1"><div class="date">114-11</div><div class="unit-price">44.8 <span class="unit">萬/坪</span></div><div class="total-price">1,157萬元</div><div class="cancel-badge">已解約</div></label></td></tr>
+</tbody></table></div>
+</div>
+<div class="panels">
+<div class="detail-panel" id="p-B7_4">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B7戶　4F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房2廳2衛</span><span class="tag">115-05-29 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-28 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">36.4<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">30.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,060<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>25.8坪</td><td>36.4萬</td><td>940萬</td></tr>
+<tr><td>坡道機械</td><td>4.7坪</td><td>25.5萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,060萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-A5_3">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">A5戶　3F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房1廳1衛</span><span class="tag">114-12-25 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-14 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">38.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">26.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">965<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>21.9坪</td><td>38.6萬</td><td>845萬</td></tr>
+<tr><td>坡道機械</td><td>4.7坪</td><td>25.5萬</td><td>120萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>965萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-B7_5">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">B7戶　5F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房1廳2衛</span><span class="tag">114-12-27 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-18 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">37.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">35.5<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,140<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>25.8坪</td><td>37.8萬</td><td>975萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>17.0萬</td><td>165萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,140萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-A8_10">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">A8戶　10F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房1廳1衛</span><span class="tag">114-11-15 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">39.0<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">18.9<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">735<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>18.9坪</td><td>39.0萬</td><td>735萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>735萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S9_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店9　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-11-29 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-09 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">44.8<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">31.9<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,157<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>22.2坪</td><td>44.8萬</td><td>992萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>17.0萬</td><td>165萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,157萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-A8_3">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">A8戶　3F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房1廳1衛</span><span class="tag">114-10-13 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-31 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">37.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">18.9<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">710<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>18.9坪</td><td>37.6萬</td><td>710萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>710萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S3_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店3　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-10-13 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">50.7<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">20.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,055<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>20.8坪</td><td>50.7萬</td><td>1,055萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,055萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S7_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店7　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-10-09 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">50.5<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">20.7<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,045<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>20.7坪</td><td>50.5萬</td><td>1,045萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,045萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-A9_4">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">A9戶　4F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">2房1廳1衛</span><span class="tag">114-10-15 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-05 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">36.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">28.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">855<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>18.9坪</td><td>36.6萬</td><td>690萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>17.0萬</td><td>165萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>855萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S2_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店2　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-10-06 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">48.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">30.6<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,182<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>20.9坪</td><td>48.5萬</td><td>1,017萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>17.0萬</td><td>165萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,182萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S8_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店8　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-10-13 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-31 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">50.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">41.1<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,450<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>21.7坪</td><td>50.6萬</td><td>1,100萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>18.1萬</td><td>175萬</td></tr><tr><td>坡道平面</td><td>9.7坪</td><td>18.1萬</td><td>175萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,450萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S5_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店5　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-09-27 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">48.4<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">23.1<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,120<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>23.1坪</td><td>48.4萬</td><td>1,120萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,120萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S6_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店6　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-09-26 成交</span></div>
+
+<div class="price-row">
+<div class="price-item"><div class="big">50.6<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">22.3<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,130<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>22.3坪</td><td>50.6萬</td><td>1,130萬</td></tr>
+
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,130萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)</p>
+</div>
+</div>
+<div class="detail-panel" id="p-S1_1">
+<div class="detail-header"><label class="collapse-btn" for="r-none">✕ 關閉</label><h2>登錄詳情</h2></div>
+<div class="which">店1　1F</div>
+<div class="address-box">沙鹿區民族路</div>
+
+<div class="txn">
+
+<div class="tags"><span class="tag">店面</span><span class="tag">114-09-28 成交</span><span class="tag tag-cancel">已解約</span></div>
+<div class="cancel-note">本筆交易已於 115-07-10 解約</div>
+<div class="price-row">
+<div class="price-item"><div class="big">48.1<span class="u"> 萬/坪</span></div></div>
+<div class="price-item mid"><div class="big">33.8<span class="u"> 坪</span></div></div>
+<div class="price-item"><div class="big">1,325<span class="u"> 萬</span></div></div>
+</div>
+<p class="comp-title">價格構成</p>
+<table class="comp-table">
+<thead><tr><th>類別</th><th>坪數</th><th>單價</th><th>總價</th></tr></thead>
+<tbody>
+<tr><td>建物面積</td><td>24.1坪</td><td>48.1萬</td><td>1,160萬</td></tr>
+<tr><td>坡道平面</td><td>9.7坪</td><td>17.0萬</td><td>165萬</td></tr>
+<tr class="total-row"><td>合計</td><td></td><td></td><td>1,325萬</td></tr>
+</tbody></table>
+<p class="deal-type">交易標的：房地(土地+建物)+車位</p>
+</div>
+</div>
+</div>
+</div>
+<p class="footnote">
+每格由上至下：交易月份（民國年-月）／單價（萬元・坪）／總價（萬元）。「尚未登錄」表示該樓層戶別尚無實價登錄紀錄，不等於未銷售。<br>
+單價與「建物面積」皆已扣除車位；詳情面板中的「總面積」則含車位坪數，兩者不同屬正常。<br>
+本頁由排程自動更新，資料以內政部實價查詢服務網為準。
+</p>
+</div>
+</body>
+</html>

@@ -1,15 +1,17 @@
 {
-  "_comment": "要追蹤的建案。county 是內政部開放資料的縣市代碼字母（台北 a、台中 b、基隆 c、台南 d、高雄 e、新北 f、宜蘭 g、桃園 h、嘉義市 i、新竹縣 j、苗栗 k、南投 m、彰化 n、新竹市 o、雲林 p、嘉義縣 q、屏東 t、花蓮 u、台東 v、金門 w、澎湖 x、連江 z）。name 需與實價登錄上的建案名稱完全相符。",
-  "backfill_seasons": 8,
+  "_comment": "選填。sources/ 底下的檔案會自動產出頁面；這裡只用來指定網址代號與顯示標題。name 需與銷售表中的建案名稱相符，沒列到的建案會用檔名當網址代號。",
   "projects": [
     {
-      "slug": "shengxing-fengchuan",
       "name": "勝興豐川",
-      "county": "b",
+      "slug": "shengxing-fengchuan",
       "title": "勝興豐川",
       "subtitle": "臺中市梧棲區"
+    },
+    {
+      "name": "富旺心海綻",
+      "slug": "fuwang-xinhaizhan",
+      "title": "富旺心海綻",
+      "subtitle": "臺中市沙鹿區"
     }
-  ],
-  "publish_months": 6,
-  "_comment2": "backfill_seasons 是回補幾個季別；publish_months 是回溯幾個月的發布日檔案。發布日檔案用來補當季尚未封存的空窗，也是取得解約情形更新的唯一途徑。"
+  ]
 }
