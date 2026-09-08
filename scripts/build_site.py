@@ -44,6 +44,11 @@ def build(project: dict, records: list[dict]) -> str:
     keys = list(groups)
     latest = {k: rows[0] for k, rows in groups.items()}
 
+    # 表頭顯示原始的棟及號寫法，比合成代號好辨識
+    labels = {}
+    for r in records:
+        labels.setdefault(r["unit"], r.get("unit_label") or r["unit"])
+
     shops = sorted({r["unit"] for r in latest.values() if r["unit"].startswith("店")})
     homes = sorted({r["unit"] for r in latest.values() if not r["unit"].startswith("店")})
 
@@ -84,7 +89,8 @@ def build(project: dict, records: list[dict]) -> str:
                 f'{badge}{multi}</label></td>')
 
     def matrix(units, rows, klass, corner, show_layout):
-        head = "".join(f'<th id="colhead-{slug(u)}">{_esc(u)}</th>' for u in units)
+        head = "".join(f'<th id="colhead-{slug(u)}">{_esc(labels.get(u, u))}</th>'
+                       for u in units)
         layout_row = ""
         if show_layout:
             layout_row = ('<tr class="meta-row"><td class="corner-label">格局</td>'
@@ -97,8 +103,9 @@ def build(project: dict, records: list[dict]) -> str:
             body += (f'<tr><td class="floor" id="floorlabel-{f}">{f}F</td>'
                      + "".join(cell(u, f) for u in units) + "</tr>\n")
         cols = "".join("<col>" for _ in units)
+        min_w = 58 + 86 * len(units)
         return f'''<div class="grid-wrap">
-<table class="matrix {klass}">
+<table class="matrix {klass}" style="min-width:{min_w}px">
 <colgroup><col style="width:58px">{cols}</colgroup>
 <thead><tr class="unit-row"><th>{corner}</th>{head}</tr>{layout_row}{area_row}</thead>
 <tbody>

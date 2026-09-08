@@ -1,6 +1,7 @@
 [
  {
   "unit": "B7",
+  "unit_label": "B7棟",
   "floor": 4,
   "dong_hao": "B7棟0號",
   "raw_date": "1150529",
@@ -28,6 +29,7 @@
  },
  {
   "unit": "A5",
+  "unit_label": "A5棟",
   "floor": 3,
   "dong_hao": "A5棟0號",
   "raw_date": "1141225",
@@ -55,6 +57,7 @@
  },
  {
   "unit": "B7",
+  "unit_label": "B7棟",
   "floor": 5,
   "dong_hao": "B7棟0號",
   "raw_date": "1141227",
@@ -82,6 +85,7 @@
  },
  {
   "unit": "A8",
+  "unit_label": "A8棟",
   "floor": 10,
   "dong_hao": "A8棟0號",
   "raw_date": "1141115",
@@ -103,6 +107,7 @@
  },
  {
   "unit": "店9",
+  "unit_label": "店9棟",
   "floor": 1,
   "dong_hao": "店9棟0號",
   "raw_date": "1141129",
@@ -130,6 +135,7 @@
  },
  {
   "unit": "A8",
+  "unit_label": "A8棟",
   "floor": 3,
   "dong_hao": "A8棟0號",
   "raw_date": "1141013",
@@ -151,6 +157,7 @@
  },
  {
   "unit": "店3",
+  "unit_label": "店3棟",
   "floor": 1,
   "dong_hao": "店3棟0號",
   "raw_date": "1141013",
@@ -172,6 +179,7 @@
  },
  {
   "unit": "店7",
+  "unit_label": "店7棟",
   "floor": 1,
   "dong_hao": "店7棟0號",
   "raw_date": "1141009",
@@ -193,6 +201,7 @@
  },
  {
   "unit": "A9",
+  "unit_label": "A9棟",
   "floor": 4,
   "dong_hao": "A9棟0號",
   "raw_date": "1141015",
@@ -220,6 +229,7 @@
  },
  {
   "unit": "店2",
+  "unit_label": "店2棟",
   "floor": 1,
   "dong_hao": "店2棟0號",
   "raw_date": "1141006",
@@ -247,6 +257,7 @@
  },
  {
   "unit": "店8",
+  "unit_label": "店8棟",
   "floor": 1,
   "dong_hao": "店8棟0號",
   "raw_date": "1141013",
@@ -279,6 +290,7 @@
  },
  {
   "unit": "店5",
+  "unit_label": "店5棟",
   "floor": 1,
   "dong_hao": "店5棟0號",
   "raw_date": "1140927",
@@ -300,6 +312,7 @@
  },
  {
   "unit": "店6",
+  "unit_label": "店6棟",
   "floor": 1,
   "dong_hao": "店6棟0號",
   "raw_date": "1140926",
@@ -321,6 +334,7 @@
  },
  {
   "unit": "店1",
+  "unit_label": "店1棟",
   "floor": 1,
   "dong_hao": "店1棟0號",
   "raw_date": "1140928",

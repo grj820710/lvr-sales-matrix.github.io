@@ -37,15 +37,38 @@ def _txt(v) -> str:
     return "" if s.lower() in ("nan", "nat", "none") else s
 
 
-def split_unit(dong_hao: str) -> tuple[str, int | None]:
+def split_unit(dong_hao: str) -> tuple[str, str, int | None]:
+    """從「棟及號」拆出 (欄位代號, 顯示標籤, 樓層)。
+
+    實價登錄這一欄的寫法各案不同，目前遇過三種：
+
+        'B棟05F-05號'  棟別 + 樓層 + 戶號   → B05 / B棟05號 / 5 樓
+        'A棟1號'       棟別 + 戶號          → A01 / A棟1號  / 樓層另取
+        'B7棟0號'      只有棟別（戶號為 0） → B7  / B7棟    / 樓層另取
+
+    第二種是重點：戶號在「號」的位置。若只取「棟」前面那段，A棟1號到
+    A棟6號會全部併成同一欄，整張矩陣就失去辨識度。
+    """
     s = _txt(dong_hao)
-    m = re.match(r"^([A-Za-z\u4e00-\u9fff]+?)棟0*(\d+)F-0*(\d+)號", s)
+
+    # 形式一：棟 + 樓層 + 戶號
+    m = re.match(r"^(.+?)棟0*(\d+)F-0*(\d+)號", s)
     if m:
-        return f"{m.group(1)}{int(m.group(3)):02d}", int(m.group(2))
+        tower, floor, no = m.group(1).strip(), int(m.group(2)), int(m.group(3))
+        return f"{tower}{no:02d}", f"{tower}棟{no:02d}號", floor
+
+    # 形式二／三：棟 + 號（號為 0 代表未編戶號）
+    m = re.match(r"^(.+?)棟0*(\d+)號$", s)
+    if m:
+        tower, no = m.group(1).strip(), int(m.group(2))
+        if no:
+            return f"{tower}{no:02d}", f"{tower}棟{no}號", None
+        return tower, f"{tower}棟", None
+
+    # 其他寫法：整串當一欄，標籤保留原文以免誤導
     m = re.match(r"^(.+?)棟", s)
-    if m:
-        return m.group(1).strip(), None
-    return s or "未標示", None
+    tower = m.group(1).strip() if m else (s or "未標示")
+    return tower, s or "未標示", None
 
 
 def _fmt_date(roc) -> str:
@@ -115,7 +138,7 @@ def parse(path: Path) -> tuple[str, list[dict]]:
         if c_proj and not project:
             project = _txt(r[c_proj])
 
-        unit, floor = split_unit(r[c_dong])
+        unit, unit_label, floor = split_unit(r[c_dong])
         if floor is None and c_floor:
             fl = _txt(r[c_floor]).split("/")[0]
             floor = int(_num(fl)) if fl else None
@@ -159,6 +182,7 @@ def parse(path: Path) -> tuple[str, list[dict]]:
         raw_date = re.sub(r"\D", "", _txt(r[c_date]))
         records.append({
             "unit": unit,
+            "unit_label": unit_label,
             "floor": int(floor),
             "dong_hao": _txt(r[c_dong]),
             "raw_date": raw_date,
