@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 import build_site
 import parse_xls
+import tongyong
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "sources"
@@ -38,10 +39,21 @@ def load_config() -> dict:
 
 
 def make_slug(name: str, stem: str) -> str:
-    """網址用的 ASCII 代號。優先用檔名，中文檔名則退回雜湊。"""
-    ascii_stem = re.sub(r"[^A-Za-z0-9]+", "-", stem).strip("-").lower()
-    if ascii_stem:
-        return ascii_stem
+    """網址用的 ASCII 代號，一律取自檔名。
+
+    純英數檔名沿用原樣（連字號保留）；含中文的檔名轉成通用拼音，
+    不帶聲調、不含空白，例如「勝興豐川」→ shengsingfongchuan。
+    真的轉不出來（例如檔名全是符號）才退回雜湊值。
+    """
+    has_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in stem)
+    if has_cjk:
+        slug = tongyong.romanize(stem)
+        if slug:
+            return slug
+    else:
+        ascii_stem = re.sub(r"[^A-Za-z0-9]+", "-", stem).strip("-").lower()
+        if ascii_stem:
+            return ascii_stem
     return "p-" + hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
 
 

@@ -27,8 +27,28 @@ push 之後 GitHub Actions 會自動重新產出 `docs/`，Pages 隨即更新。
 }
 ```
 
-`name` 要與銷售表裡的建案名稱相符。沒列到的建案會用檔名當網址代號，
-中文檔名則退回雜湊值——所以檔名還是取英文比較好認。
+`name` 要與銷售表裡的建案名稱相符。沒列到的建案會用檔名當網址代號。
+
+## 網址代號的產生規則
+
+一律取自**檔名**（不是建案名稱），一律小寫：
+
+| 檔名 | 產出 |
+| --- | --- |
+| `shengxing-fengchuan.xls` | `shengxing-fengchuan.html` |
+| `My Project 2026.xls` | `my-project-2026.html` |
+| `勝興豐川.xls` | `shengsingfongchuan.html` |
+| `中文檔名測試.xlsx` | `jhongwundangmingceshih.html` |
+
+含中文的檔名會轉成**通用拼音**，不帶聲調符號、不含空白。轉換規則依教育部
+對照表實作（`scripts/tongyong.py`），聲母 zh→jh、q→c、x→s，並處理空韻
+（shi→shih）、撮口呼（xu→syu）、韻母（-iu→-iou、-ui→-uei）與 feng→fong
+等特例。已用高雄 gaosiong、新竹 sinjhu、淡水 danshuei 等官方譯名驗證。
+
+`projects.json` 裡的 `slug` 會覆寫上述規則，優先權最高。
+
+**改檔名等於改網址。** 舊網址不會自動保留轉址，`docs/` 底下的舊檔案也不會
+自動刪除，需要時請自行清掉。
 
 ## 一格多筆
 
