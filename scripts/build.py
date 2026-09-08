@@ -114,9 +114,37 @@ def main() -> int:
 
     if built:
         (DOCS / "index.html").write_text(_index(built), encoding="utf-8")
+
+    # 清掉已經沒有對應來源檔的產出。只有在全部來源都處理成功時才做，
+    # 否則一次解析失敗就會把還在用的頁面刪掉。
+    if failed:
+        print("\n有來源處理失敗，略過清理步驟以免誤刪既有頁面")
+    else:
+        _cleanup({slug for _, slug, _, _ in built})
+
+    if built:
         print(f"\n完成，共 {len(built)} 個建案")
 
     return 1 if failed else 0
+
+
+def _cleanup(keep: set[str]) -> None:
+    """刪除不再對應任何來源檔的頁面與資料。"""
+    removed = []
+    for f in sorted(DOCS.glob("*.html")):
+        if f.name == "index.html":
+            continue
+        if f.stem not in keep:
+            f.unlink()
+            removed.append(f"docs/{f.name}")
+    for f in sorted(DATA.glob("*.json")):
+        if f.stem not in keep:
+            f.unlink()
+            removed.append(f"data/{f.name}")
+    if removed:
+        print("\n已移除沒有對應來源檔的產出：")
+        for r in removed:
+            print(f"  - {r}")
 
 
 def _index(rows) -> str:
