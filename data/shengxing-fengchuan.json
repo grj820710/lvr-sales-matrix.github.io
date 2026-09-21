@@ -1,5 +1,94 @@
 [
  {
+  "unit": "B02",
+  "unit_label": "B棟02號",
+  "floor": 7,
+  "dong_hao": "B棟07F-02號",
+  "raw_date": "1150803",
+  "date": "115-08",
+  "full_date": "115-08-03",
+  "total_price": 1095.0,
+  "total_area": 45.99,
+  "unit_price": 24.53,
+  "building_area": 38.33,
+  "building_price": 940.0,
+  "building_unit_price": 24.52,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "1|B棟07F-02號|1150803|1095"
+ },
+ {
+  "unit": "C01",
+  "unit_label": "C棟01號",
+  "floor": 8,
+  "dong_hao": "C棟08F-01號",
+  "raw_date": "1150802",
+  "date": "115-08",
+  "full_date": "115-08-02",
+  "total_price": 1108.0,
+  "total_area": 46.52,
+  "unit_price": 24.78,
+  "building_area": 38.86,
+  "building_price": 963.0,
+  "building_unit_price": 24.78,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 145.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "2|C棟08F-01號|1150802|1108"
+ },
+ {
+  "unit": "C05",
+  "unit_label": "C棟05號",
+  "floor": 12,
+  "dong_hao": "C棟12F-05號",
+  "raw_date": "1150810",
+  "date": "115-08",
+  "full_date": "115-08-10",
+  "total_price": 1348.0,
+  "total_area": 56.46,
+  "unit_price": 26.08,
+  "building_area": 41.14,
+  "building_price": 1073.0,
+  "building_unit_price": 26.08,
+  "parking": [
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 155.0
+   },
+   {
+    "type": "坡道平面",
+    "area": 7.66,
+    "price": 120.0
+   }
+  ],
+  "layout": "3房2廳2衛",
+  "address": "梧棲區中華路一段979巷跟文昌路251巷交叉口",
+  "deal_type": "房地(土地+建物)+車位",
+  "cancelled": false,
+  "cancel_date": "",
+  "key": "3|C棟12F-05號|1150810|1348"
+ },
+ {
   "unit": "C03",
   "unit_label": "C棟03號",
   "floor": 8,
@@ -30,7 +119,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "1|C棟08F-03號|1150712|1326"
+  "key": "4|C棟08F-03號|1150712|1326"
  },
  {
   "unit": "B05",
@@ -68,7 +157,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "2|B棟8F-05號|1150712|1555"
+  "key": "5|B棟8F-05號|1150712|1555"
  },
  {
   "unit": "B02",
@@ -96,7 +185,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "3|B棟09F-02號|1150717|1095"
+  "key": "6|B棟09F-02號|1150717|1095"
  },
  {
   "unit": "C01",
@@ -124,7 +213,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "4|C棟02F-01號|1150715|1170"
+  "key": "7|C棟02F-01號|1150715|1170"
  },
  {
   "unit": "C01",
@@ -152,7 +241,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "5|C棟05F-01號|1150727|1130"
+  "key": "8|C棟05F-01號|1150727|1130"
  },
  {
   "unit": "B03",
@@ -185,7 +274,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "6|B棟07F-03號|1150618|1406"
+  "key": "9|B棟07F-03號|1150618|1406"
  },
  {
   "unit": "C05",
@@ -213,7 +302,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "7|C棟09F-05號|1150625|1258"
+  "key": "10|C棟09F-05號|1150625|1258"
  },
  {
   "unit": "C05",
@@ -241,7 +330,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "8|C棟08F-05號|1150524|1210"
+  "key": "11|C棟08F-05號|1150524|1210"
  },
  {
   "unit": "B02",
@@ -269,7 +358,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "9|B棟03F-02號|1150409|1055"
+  "key": "12|B棟03F-02號|1150409|1055"
  },
  {
   "unit": "B01",
@@ -297,7 +386,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "10|B棟06F-01號|1150426|1098"
+  "key": "13|B棟06F-01號|1150426|1098"
  },
  {
   "unit": "B02",
@@ -325,7 +414,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "11|B棟04F-02號|1150420|1065"
+  "key": "14|B棟04F-02號|1150420|1065"
  },
  {
   "unit": "B01",
@@ -358,7 +447,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "12|B棟03F-01號|1150428|1173"
+  "key": "15|B棟03F-01號|1150428|1173"
  },
  {
   "unit": "B05",
@@ -391,7 +480,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "13|B棟05F-05號|1150301|1395"
+  "key": "16|B棟05F-05號|1150301|1395"
  },
  {
   "unit": "C05",
@@ -429,7 +518,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "14|C棟06F-05號|1150307|1418"
+  "key": "17|C棟06F-05號|1150307|1418"
  },
  {
   "unit": "C03",
@@ -457,7 +546,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "15|C棟06F-03號|1150322|1208"
+  "key": "18|C棟06F-03號|1150322|1208"
  },
  {
   "unit": "B05",
@@ -490,7 +579,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "16|B棟09F-05號|1150207|1420"
+  "key": "19|B棟09F-05號|1150207|1420"
  },
  {
   "unit": "B02",
@@ -518,7 +607,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "17|B棟08F-02號|1150119|1115"
+  "key": "20|B棟08F-02號|1150119|1115"
  },
  {
   "unit": "B02",
@@ -546,7 +635,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "18|B棟05F-02號|1150128|1080"
+  "key": "21|B棟05F-02號|1150128|1080"
  },
  {
   "unit": "C05",
@@ -574,7 +663,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "19|C棟05F-05號|1141230|1182"
+  "key": "22|C棟05F-05號|1141230|1182"
  },
  {
   "unit": "B02",
@@ -602,7 +691,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": true,
   "cancel_date": "115-07-26",
-  "key": "20|B棟07F-02號|1141228|1095"
+  "key": "23|B棟07F-02號|1141228|1095"
  },
  {
   "unit": "B02",
@@ -630,7 +719,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "21|B棟06F-02號|1141128|1075"
+  "key": "24|B棟06F-02號|1141128|1075"
  },
  {
   "unit": "C03",
@@ -658,7 +747,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "22|C棟07F-03號|1141004|1208"
+  "key": "25|C棟07F-03號|1141004|1208"
  },
  {
   "unit": "B02",
@@ -686,7 +775,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "23|B棟02F-02號|1141004|1068"
+  "key": "26|B棟02F-02號|1141004|1068"
  },
  {
   "unit": "B05",
@@ -719,7 +808,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "24|B棟11F-05號|1141014|1455"
+  "key": "27|B棟11F-05號|1141014|1455"
  },
  {
   "unit": "B05",
@@ -747,7 +836,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "25|B棟07F-05號|1141025|1305"
+  "key": "28|B棟07F-05號|1141025|1305"
  },
  {
   "unit": "B05",
@@ -775,7 +864,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "26|B棟06F-05號|1140906|1300"
+  "key": "29|B棟06F-05號|1140906|1300"
  },
  {
   "unit": "C05",
@@ -803,7 +892,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "27|C棟11F-05號|1140910|1245"
+  "key": "30|C棟11F-05號|1140910|1245"
  },
  {
   "unit": "C05",
@@ -836,7 +925,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "28|C棟10F-05號|1140921|1337"
+  "key": "31|C棟10F-05號|1140921|1337"
  },
  {
   "unit": "B05",
@@ -874,7 +963,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "29|B棟13F-05號|1140809|1590"
+  "key": "32|B棟13F-05號|1140809|1590"
  },
  {
   "unit": "B05",
@@ -907,7 +996,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "30|B棟12F-05號|1140809|1465"
+  "key": "33|B棟12F-05號|1140809|1465"
  },
  {
   "unit": "C05",
@@ -940,7 +1029,7 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "31|C棟07F-05號|1140810|1338"
+  "key": "34|C棟07F-05號|1140810|1338"
  },
  {
   "unit": "C03",
@@ -973,6 +1062,6 @@
   "deal_type": "房地(土地+建物)+車位",
   "cancelled": false,
   "cancel_date": "",
-  "key": "32|C棟09F-03號|1140824|1350"
+  "key": "35|C棟09F-03號|1140824|1350"
  }
 ]
